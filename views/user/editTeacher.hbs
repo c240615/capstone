@@ -1,0 +1,164 @@
+<form method="POST" action="/teachers/edit/{{user.id}}?_method=PUT">
+
+  <div class="mb-3">
+    <label for="name" class="form-label">教師名稱{{#if teacher}}{{this.id}}{{/if}}</label>
+    <input
+      id="name"
+      name="name"      
+      class="form-control"
+      type="text"
+      value="{{user.name}}"
+    >
+  </div>
+  <!--intro-->
+  <div class="mb-3">
+    <label for="intro" class="form-label">課程介紹</label>
+    <textarea
+      id="intro"
+      name="intro"
+      rows="2"
+      cols="10"
+      class="form-control"      
+    >{{teacher.intro}}</textarea>
+  </div>
+  <!--style-->
+  <div class="mb-3">
+    <label for="style" class="form-label">教學風格</label>
+    <textarea
+      id="style"
+      name="style"
+      rows="2"
+      cols="10"
+      class="form-control"      
+    >{{teacher.style}}</textarea>
+  </div>
+  <!--course duration-->
+  <div class="mb-3">
+    <label for="courseDuration" class="form-label">單堂課程時間(分鐘)</label>
+    <select
+      class="form-select"
+      aria-label="duration"
+      name="courseDuration"
+      id="courseDuration"
+    >
+      <option selected value="0.5">30 分鐘</option>
+      <option value="1">60 分鐘</option>
+    </select>
+  </div>
+  <!--link-->
+  <div class="mb-3">
+    <label for="link" class="form-label">你的課程連結</label>
+    <input type="text" class="form-control" id="link" name="link" value="{{teacher.link}}"/>
+  </div>
+  <!--appointment-->
+  <div class="mb-3">
+    <label for="link" class="form-label">開放預約時間</label>
+    <!-- Sunday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0 "
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Sunday"
+          name="sunday"
+        />
+      </div>
+      <label for="Sunday" class="form-control text-align">Sunday</label>
+    </div>
+    <br />
+    <!-- Monday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Monday"
+          name="monday"
+        />
+      </div>
+      <label for="Monday" class="form-control text-align">Monday</label>
+    </div>
+    <br />
+    <!-- Tuesday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Tuesday"
+          name="tuesday"
+        />
+      </div>
+      <label for="Tuesday" class="form-control text-align">Tuesday</label>
+    </div>
+    <br />
+    <!-- Wednesday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Wednesday"
+          name="wednesday"
+        />
+      </div>
+      <label for="Wednesday" class="form-control text-align">Wednesday</label>
+    </div>
+    <br />
+    <!-- Thursday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Thursday"
+          name="thursday"
+        />
+      </div>
+      <label for="Thursday" class="form-control text-align">Thursday</label>
+    </div>
+    <br />
+    <!-- Friday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Friday"
+          name="friday"
+        />
+      </div>
+      <label for="Friday" class="form-control text-align">Friday</label>
+    </div>
+    <br />
+    <!-- Saturday -->
+    <div class="input-group">
+      <div class="input-group-text bg-danger">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          value="true"
+          aria-label="Radio button for following text input"
+          id="Saturday"
+          name="saturday"
+        />
+      </div>
+      <label for="Saturday" class="form-control text-align">Saturday</label>
+    </div>
+    <br />
+  </div>
+  <button type="submit" class="btn btn-outline-danger">Submit</button>
+</form>
+<a class="btn btn-secondary my-2" href="/teachers/{{teacher.id}}">Back</a>

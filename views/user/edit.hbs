@@ -1,0 +1,48 @@
+<form method="POST" action="/users/putedit/{{user.id}}?_method=PUT" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input
+      type="text"
+      name="name"
+      class="form-control"
+      id="name"
+      aria-describedby="emailHelp"
+      value="{{user.name}}"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="nation" class="form-label">Nation</label>
+    <input
+      type="text"
+      name="nation"
+      class="form-control"
+      id="nation"
+      aria-describedby="emailHelp"
+      value="{{user.nation}}"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="intro" class="form-label">Introduction</label>
+    <input
+      type="text"
+      name="intro"
+      class="form-control"
+      id="intro"
+      value="{{user.intro}}"
+    />
+  </div>
+    <div class="mb-3">
+    <label for="profile" class="form-label">Profile</label>
+    <input
+      type="file"
+      name="profile"
+      class="form-control"
+      id="profile"
+      value="{{user.profile}}"      
+    />
+    {{user.profile}}
+  </div>
+
+  <button type="submit" class="btn btn-secondary">Submit</button>
+</form>
+<a class="btn btn-secondary my-2" href="/users/{{user.id}}">Back</a>

@@ -1,0 +1,168 @@
+<div class="container-fluid">
+  <div class="row">
+    <!--教師清單-->
+    <div class="col-8 d-flex justify-content-around flex-wrap">
+      <div class="container">
+        <div class="row g-3">
+
+          <div class="card p-0 m-3" style="width: 18rem;height: 100%;">
+            <img
+              src="{{teacher.User.profile}}"
+              class="card-img-top m-0 p-0"
+              alt="profile"
+            />
+          </div>
+
+          <div class="card bg-light" style="width: 18rem;border:0cap;">
+            <div class="card-body">
+              <h5 class="card-title">
+                <h1>{{teacher.User.name}}</h1>
+              </h5>
+              <p class="card-text">{{teacher.User.nation}}</p>
+              <p>評分 : {{averageScore}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="list-group m-4">
+            <a
+              href="#"
+              class="list-group-item list-group-item-action"
+              aria-current="true"
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Introduction</h5>
+              </div>
+              <p class="mb-1">{{teacher.intro}}</p>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Teaching Style</h5>
+              </div>
+              <p class="mb-1">{{teacher.style}}</p>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Lesson History</h5>
+              </div>
+              {{#each courseScore}}
+                <p class="mb-1">{{this.score}} - {{this.intro}}</p>
+              {{/each}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--預約上課-->
+    {{#if user.isTeacher}}
+    {{else}}
+    <div class="col-4 p-3">
+      <form
+        action="/reserve/{{teacher.id}}"
+        method="POST"
+        class="d-flex flex-column was-validated"
+      >
+        <div class="m-2">
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            name="date"
+            required
+          >
+            <option class="is-invalid">請選擇課程</option>
+            {{#each final}}
+              <option name="date" value="{{this.date}}" type="text">
+                {{this.date}}
+              </option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="m-0">
+          <button
+            id="chooseLesson"
+            type="button"
+            class="btn btn-danger mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#chooseLessonModal"
+          >預約課程</button>
+        </div>
+      </form>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="chooseLessonModal"
+  tabindex="-1"
+  aria-labelledby="chooseLessonModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <form action="/reserve/{{teacher.id}}" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="chooseLessonModalLabel"></h1>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">預約時間：</span>
+            <input
+              id="courseDate"
+              class="form-control"
+              type="text"
+              name="date"
+              value="預約失敗，請重新選擇"
+              aria-label="預約時間"
+              readonly
+            />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">預約老師：</span>
+            <input
+              id="teacher-name-modal"
+              class="form-control"
+              type="text"
+              value="{{teacher.User.name}}"
+              aria-label="預約老師"
+              disabled
+              readonly
+            />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">上課網址：</span>
+            <input
+              id="teacher-url-modal"
+              class="form-control"
+              type="text"
+              value="{{teacher.link}}"
+              aria-label="上課網址"
+              disabled
+              readonly
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            id="modal-close"
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >Close</button>
+          <button type="submit" class="btn btn-danger mx-2">確定</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const select = document.querySelector(".form-select"); const courseDate =
+  document.getElementById("courseDate"); select.addEventListener("change",
+  function () { let index = select.selectedIndex; courseDate.value =
+  select.options[index].value; }
+   )
+</script>

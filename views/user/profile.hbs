@@ -1,0 +1,174 @@
+<div class="container">
+  <div class="row">
+    <!--基本資料-->
+    <div class="col-4 d-flex card bg-light border-0">
+      <img class="card-img-top my-3" src="{{user.profile}}" alt="user.img" />
+      <h1 class="my-2"> {{user.name}}</h1>
+      <h3 class="my-2"> {{user.nation}}</h3>
+      <h3>course.score</h3>
+      <h3>About Me</h3>
+      <h4>{{user.intro}}</h4>
+
+      <button class="btn btn-secondary my-2" type="button" id="button-addon2"><a
+          class="text-decoration-none text-white"
+          href="/users/edit/{{user.id}}"
+        >Edit</a>
+      </button>
+      <a class="btn btn-secondary" href="/">Back</a>
+    </div>
+
+    <!--課程資料-->
+    <div class="col-8">
+      <!--未完成未評分課程-->
+      <h3 class="my-4">New Schedule</h3>
+      <div class="row my-2">
+        {{#each notDoneCourses}}
+          <div class="col-6 ">
+            <div class="card " style="width: 18rem;">
+              <div class="card-body">
+                <h6 class="card-title">{{this.date}}</h6>
+                <h6 class="card-subtitle mb-2">Teacher :
+                  {{this.Teacher.User.name}}</h6>
+                <h6>session link:</h6>
+                <a href="/comment" class="card-link">{{this.Teacher.link}}</a>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+
+      <!--已完成未評分課程-->
+      <h3 class="my-4">Lesson History</h3>
+      <div class="row">
+        {{#each notRatedCourses}}
+          <form class="row g-3 col-6 m-0 p-0">
+            <div class="col-auto">
+              <img
+                readonly
+                class="form-control-plaintext p-0 m-0"
+                style="width: 40px;height:auto;"
+                src="{{this.Teacher.User.profile}}"
+              />
+            </div>
+            <div class="col-3 mx-0 px-0">
+              <input
+                type="text"
+                id="courseId"
+                name="userId"
+                class="form-control"
+                value="{{this.id}}"
+              />
+            </div>
+            <div class="col-5 mx-0">
+              <input
+                type="text"
+                name="userId"
+                class="form-control"
+                value="{{this.Teacher.User.name}}"
+              />
+            </div>
+            <div class="col-auto">
+              <button
+                type="button"
+                id="toModalButton"
+                class="btn btn-danger mb-3"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Score
+              </button>
+            </div>
+          </form>
+        {{/each}}
+      </div>
+
+      <!--我的學習次數名次-->
+      <h3 class="my-4">我的學習次數名次</h3>
+      <div class="card">
+        <h5 class="card-body m-0">{{number}}</h5>
+      </div>      
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="postScore" action="/comment" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">分享本次的課程體驗</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-8 m-2">
+
+              <input
+                id="courseID"
+                type="number"
+                min="1"
+                max="100"
+                name="courseId"
+                required
+              />
+            </div>
+            <div class="col-8 m-2">
+
+              <input
+                type="number"
+                min="1"
+                max="5"
+                name="score"
+                placeholder="請輸入評分"
+                value="{{score}}"
+                required
+              />
+            </div>
+            <div class="col-8 m-2">
+
+              <input
+                type="text"
+                name="comment"
+                placeholder="請輸入留言"
+                value="{{comment}}"
+                required
+              />
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger text-white">
+            提交評分
+          </button>
+          <button
+            type="submit"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >Close</button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const courseId = document.querySelector('#courseId'); const courseID =
+  document.getElementById("courseID"); const toModalButton =
+  document.getElementById("toModalButton");
+  toModalButton.addEventListener("click", function () { courseID.value
+  =courseId.value; courseID.text = courseId.text } );
+</script>

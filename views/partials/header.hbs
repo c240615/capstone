@@ -1,0 +1,58 @@
+<header>
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Tutor</a>
+      {{#if user}}
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <!--個人資訊頁-->
+            
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/users/{{user.id}}">
+                {{user.name}}                
+              </a>
+            </li>
+            <!--成為老師-->
+            {{#if user.isTeacher}}
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/teachers/{{user.id}}">
+                  授課資訊
+                </a>
+              </li>{{else}}
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/beTeacher">
+                  成為老師
+                </a>
+              </li>
+            {{/if}}
+
+            {{#if user.isAdmin}}
+              <li class="nav-item">
+                <a href="/admin" class="nav-link">後台</a>
+              </li>
+            {{/if}}
+          </ul>
+          <button class="btn btn-outline-danger" type="submit">
+            <a href="/logout" class="text-decoration-none text-white">
+              <b>Log Out</b>
+            </a>
+          </button>
+        </div>
+      {{else}}
+        <a class="navbar-brand" aria-current="page" href="/signin">登入</a>
+        <a class="navbar-brand" aria-current="page" href="/signup">註冊</a>
+      {{/if}}
+    </div>
+  </nav>
+</header>

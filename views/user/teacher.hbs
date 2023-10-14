@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <!--基本資料-->
+    <div class="col-4 d-flex card bg-light border-0">
+      <img class="card-img-top my-3" src="{{user.profile}}" alt="user.img" />
+      <h1 class="my-2">{{user.name}}</h1>
+      <h3 class="my-2">{{user.nation}}</h3>
+
+      <h3 class="my-2">{{averageScore}}</h3>
+
+      <h3>About Me</h3>
+      <h4>{{user.intro}}</h4>
+      <button class="btn btn-secondary my-2" type="button"><a
+          class="text-decoration-none text-white"
+          href="/teachers/edit/{{user.id}}"
+        >Edit</a>
+      </button>
+      <a class="btn btn-secondary my-2" href="/">Back</a>
+    </div>
+
+    <!--課程資料-->
+    <div class="col-8">
+      <!--新課程-->
+      <h3 class="my-4">New Schedule</h3>
+      <div class="row">
+        {{#each notDoneCourses}}
+          <div class="col-6">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Time:{{this.date}}</h5>
+                <h5 class="card-subtitle mb-2">Student:{{this.User.name}}</h5>
+                <h5>session link:</h5>
+                <a href="/" class="card-link">{{this.Teacher.link}}</a>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+      <!--Your Teaching Style-->
+      <h3 class="my-4">Your Teaching Style</h3>
+      <div class="row row-cols-2">
+        <div class="col bg-light m-0">
+          <h3 class="m-0 p-0">{{style.style}}</h3>
+        </div>
+      </div>
+      <h3 class="my-4">Recent Reviewed</h3>
+      {{#each scoredCourses}}
+        <p class="mb-1">{{this.score}} - {{this.comment}}</p>
+      {{/each}}
+    </div>
+  </div>
+</div>
