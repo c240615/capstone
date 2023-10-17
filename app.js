@@ -65,3 +65,4 @@ app.listen(port, () => {
 // https://git.heroku.com/guarded-atoll-57393.git
 // https://guarded-atoll-57393-73846e516350.herokuapp.com
 // heroku ps:scale web=1 -a guarded-atoll-57393
+// http://localhost:3000/users/auth/google/callback
