@@ -138,11 +138,12 @@ const courseController = {
       where: { id: courseId, userId },
     })
       .then((course) => {
-        console.log(course);
-        return course[0].update({
-          score,
-          comment: comment || "no comment",
-        });
+        if (course?.length > 0) {
+          return course[0].update({
+            score,
+            comment: comment || "no comment",
+          });
+        }        
       })
       .then(() => {
         req.flash("success_messages", "Score was successfully update");
