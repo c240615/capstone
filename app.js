@@ -2,6 +2,8 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
   console.log('hey it’s not prod')
 }
+console.log("callbackURL:" + callbackURL);
+console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
 // 載入外部套件
 const path = require("path");
 const express = require("express");
