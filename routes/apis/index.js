@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { authenticated } = require("../../middleware/auth");
 
-const teacherController = require('../../controllers/pages/teacher-controller')
+const teacherController = require('../../controllers/apis/teacher-controller')
 
-router.get("/teachers", authenticated, teacherController.getTeachers);
+router.get("/teachers", teacherController.getTeachers);
 
 module.exports = router;

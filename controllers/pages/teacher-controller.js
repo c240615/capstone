@@ -6,7 +6,6 @@ const teacherController = {
   // 取得所有教師
   getTeachers: async (req, res, next) => {
     try {
-      const userId = req.user.id;
       const DEFAULT_LIMIT = 9;
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || DEFAULT_LIMIT;
@@ -18,21 +17,22 @@ const teacherController = {
         include: [User],
         limit,
         offset,
-      });
+      });      
       // 排行榜
       const topUsers = await User.findAll({
         raw: true,
         nest: true,
+        limit:10,
         order: [
           ["course_hours", "DESC"],
           ["name", "ASC"],
         ],
-      });      
-      const top = topUsers.map((item, index) => {
-        return { profile: item.profile, index: index + 1, name: item.name };
       });
-      const topTen = top.slice(0, 9);
-      
+      console.log(topUsers);
+      const topTen = topUsers.map((item, index) => {
+        return { profile: item.profile, index: index + 1, name: item.name };
+      });     
+
       const teacherDatas = teachers.rows;
       return res.render("teachers", {
         teacherDatas,
