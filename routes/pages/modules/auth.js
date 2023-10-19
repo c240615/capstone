@@ -13,7 +13,7 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: "/",
+    successRedirect: "/teachers",
     failureRedirect: "/signin",
   })
 );
@@ -26,7 +26,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/",
+    successRedirect: "/teachers",
     failureRedirect: "/signin",
   })
 );

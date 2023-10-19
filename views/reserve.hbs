@@ -160,8 +160,9 @@
 </div>
 
 <script>
-  const select = document.querySelector(".form-select"); const courseDate =
-  document.getElementById("courseDate"); select.addEventListener("change",
+  const select = document.querySelector(".form-select"); 
+  const courseDate = document.getElementById("courseDate"); 
+  select.addEventListener("change",
   function () { let index = select.selectedIndex; courseDate.value =
   select.options[index].value; }
    )
