@@ -79,8 +79,6 @@ passport.use(
       profileFields: ["email", "displayName"],
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log('callbackURL:'+callbackURL);
-      console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
       const { name, email } = profile._json;
       User.findOne({ where: { email } }).then((user) => {
         if (user) return done(null, user);
@@ -101,7 +99,6 @@ passport.use(
     }
   )
 );
-
 
 // serialize and deserialize user
 passport.serializeUser((user, cb) => {
