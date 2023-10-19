@@ -1,8 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
   console.log("hey it's not prod");
-  console.log("callbackURL:" + callbackURL);
-  console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
 }
 
 // 載入外部套件
@@ -18,7 +16,8 @@ const session = require("express-session");
 const SESSION_SECRET = "secret";
 const passport = require("./config/passport");
 // const db = require("./models"); // 檢查 db
-
+  console.log("callbackURL:" + callbackURL);
+  console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
 // 載入內部資料
 const { pages, apis } = require("./routes");
 // helpers
