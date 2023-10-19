@@ -16,7 +16,7 @@ const session = require("express-session");
 const SESSION_SECRET = "secret";
 const passport = require("./config/passport");
 // const db = require("./models"); // 檢查 db
-  console.log("callbackURL:" + callbackURL);
+  
   console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
 // 載入內部資料
 const { pages, apis } = require("./routes");
