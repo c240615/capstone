@@ -1,9 +1,10 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
-  console.log('hey it’s not prod')
+  console.log("hey it's not prod");
+  console.log("callbackURL:" + callbackURL);
+  console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
 }
-console.log("callbackURL:" + callbackURL);
-console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
+
 // 載入外部套件
 const path = require("path");
 const express = require("express");
@@ -19,7 +20,7 @@ const passport = require("./config/passport");
 // const db = require("./models"); // 檢查 db
 
 // 載入內部資料
-const { pages ,apis} = require("./routes");
+const { pages, apis } = require("./routes");
 // helpers
 const { getUser } = require("./helpers/auth-helpers");
 const handlebarsHelpers = require("./helpers/handlebars-helpers");
@@ -55,7 +56,7 @@ app.use((req, res, next) => {
 });
 
 // 進入分類路由
-app.use('/api', apis);
+app.use("/api", apis);
 app.use(pages);
 
 app.listen(port, () => {
