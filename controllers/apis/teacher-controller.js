@@ -15,7 +15,7 @@ const teacherController = {
       const teacherDatas = teachers.rows;
       return res.render("teachers", {
         teacherDatas,
-        users,
+        
         pagination: getPagination(limit, page, teachers.count),
         
       });
