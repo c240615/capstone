@@ -1,5 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
+  console.log('hey it’s not prod')
 }
 // 載入外部套件
 const path = require("path");
