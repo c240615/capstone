@@ -73,12 +73,14 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      clientID: `${process.env.GOOGLE_CLIENT_ID}`,
+      clientID: `${process.env.GOOGLE_ID}`,
       clientSecret: `${process.env.GOOGLE_SECRET}`,
       callbackURL: `${process.env.GOOGLE_CALLBACK}`,
       profileFields: ["email", "displayName"],
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log('callbackURL:'+callbackURL);
+      console.log("process.env.GOOGLE_CALLBACK:" + process.env.GOOGLE_CALLBACK);
       const { name, email } = profile._json;
       User.findOne({ where: { email } }).then((user) => {
         if (user) return done(null, user);
