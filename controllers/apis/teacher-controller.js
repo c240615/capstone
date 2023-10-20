@@ -1,23 +1,17 @@
-const { Teacher, User, Course } = require("../../models");
-const { getOffset, getPagination } = require("../../helpers/pagination-helper");
+const { Teacher, User } = require("../../models");
+const teacherService = require("../../services/teachers-services");
 const teacherController = {
   // 取得所有教師
-  getTeachers: async (req, res, next) => {
-    try {
-      const user = await User.findAll({ raw: true });
-      const teachers = await Teacher.findAll({
-        raw: true,
-        nest: true,
-        include: [User],
-      });
-      return res.status(200).json({
-        status: "200",
-        user: req.user ? req.user : undefined,
-        teachers,
-      });
-    } catch (err) {
-      next(err);
-    }
+  getTeachers: (req, res, next) => {
+    teacherService.getTeachers(req, (err, data) => {
+      err
+        ? next(err)
+        : res.status(200).json({
+            status: "200",
+            user: req.user ? req.user : "no data",
+            data: data,
+          });
+    });
   },
 };
 module.exports = teacherController;

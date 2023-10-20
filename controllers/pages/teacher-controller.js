@@ -1,48 +1,48 @@
+const { Teacher, User, Course } = require("../../models");
+const teacherService = require("../../services/teachers-services");
 const { getOffset, getPagination } = require("../../helpers/pagination-helper");
 const { Op } = require("sequelize");
-const { Teacher, User, Course } = require("../../models");
-
 const teacherController = {
   // 取得所有教師
+  /*
+  teacherService.getTeachers(req, (err, data) => {
+      err
+        ? next(err)
+        : res.status(200).json({
+            status: "200",
+            user: req.user ? req.user : "no data",
+            data: data,
+          });
+    });
+  */
   getTeachers: async (req, res, next) => {
-    try {
-      const DEFAULT_LIMIT = 9;
-      const page = Number(req.query.page) || 1;
-      const limit = Number(req.query.limit) || DEFAULT_LIMIT;
-      const offset = getOffset(limit, page);
-      const users = await User.findAll({ raw: true });
-      const teachers = await Teacher.findAndCountAll({
-        raw: true,
-        nest: true,
-        include: [User],
-        limit,
-        offset,
-      });      
-      // 排行榜
-      const topUsers = await User.findAll({
-        raw: true,
-        nest: true,
-        limit:10,
-        order: [
-          ["course_hours", "DESC"],
-          ["name", "ASC"],
-        ],
-      });
-      console.log(topUsers);
-      const topTen = topUsers.map((item, index) => {
-        return { profile: item.profile, index: index + 1, name: item.name };
-      });     
-
-      const teacherDatas = teachers.rows;
-      return res.render("teachers", {
-        teacherDatas,
-        users,
-        pagination: getPagination(limit, page, teachers.count),
-        topTen,
-      });
-    } catch (err) {
-      next(err);
-    }
+    // 排行榜
+    const topUsers = await User.findAll({
+      raw: true,
+      nest: true,
+      limit: 10,
+      order: [
+        ["course_hours", "DESC"],
+        ["name", "ASC"],
+      ],
+    });    
+    const topTen = topUsers.map((item, index) => {
+      return { profile: item.profile, index: index + 1, name: item.name };
+    });
+    await teacherService.getTeachers(req, (err, data) => {
+      const teacherDatas = data.teacherRows;
+      const users = data.users;
+      const pagination = data.pagination;
+      err
+        ? next(err)
+        : res.render("teachers", {
+            teacherDatas,
+            users,
+            pagination,
+            topTen,
+          });
+    });
+    
   },
   beTeacherPage: (req, res) => {
     res.render("user/beTeacher");
