@@ -1,32 +1,17 @@
-// model
-const { User } = require("../../models");
-// helper
-const { getOffset, getPagination } = require("../../helpers/pagination-helper");
-
+// service
+const adminService = require("../../services/admin-service");
 const adminController = {
   getUsers: async (req, res, next) => {
-    const DEFAULT_LIMIT = 10;
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || DEFAULT_LIMIT;
-    const offset = getOffset(limit, page);
-    await User.findAndCountAll({
-      raw: true,
-      nest: true,
-      limit,
-      offset,
-    })
-      .then((users) => {
-        const userDatas = users.rows;
-
-        res.status(200).json({
-          status: req.user ? "200" : "206",
-          user: req.user ? req.user : "User did not login.",
-          userDatas,
-        });
-      })
-      .catch((err) => {
-        next(err);
-      });
+    adminService.getUsers(req, (err, data) => {
+      err
+        ? next(err)
+        : res.status(200).json({
+            status: req.user ? "200" : "206",
+            user: req.user ? req.user : "User did not login.",
+            userDatas: data.userDatas,
+            pagination: data.pagination,
+          });
+    });
   },
   getSearchedUsers: async (req, res, next) => {
     const keyword = req.query.keyword.toLowerCase().trim();

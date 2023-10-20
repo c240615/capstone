@@ -24,20 +24,16 @@ const teacherController = {
       return { profile: item.profile, index: index + 1, name: item.name };
     });
     await teacherService.getTeachers(req, (err, data) => {
-      const teacherDatas = data.teacherRows;
-      const users = data.users;
-      const pagination = data.pagination;
       err
         ? next(err)
         : res.render("teachers", {
-            teacherDatas,
-            users,
-            pagination,
+            teacherDatas: data.teacherRows,
+            pagination: data.pagination,
             topTen,
           });
     });
   },
-  beTeacherPage: (req, res) => {
+  beTeacherPage: (res) => {
     res.render("user/beTeacher");
   },
   postBeTeacher: async (req, res, next) => {
