@@ -1,6 +1,5 @@
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-  console.log("hey it's not prod");
+  require("dotenv").config();  
 }
 
 // 載入外部套件

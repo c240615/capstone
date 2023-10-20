@@ -15,7 +15,7 @@ const adminController = {
     })
       .then((users) => {
         const userDatas = users.rows;
-        res.render("admin/users", {
+        res.status(200).json( {
           userDatas,
           pagination: getPagination(limit, page, users.count),
         });
