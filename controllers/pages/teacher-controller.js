@@ -1,20 +1,14 @@
-const { Teacher, User, Course } = require("../../models");
-const teacherService = require("../../services/teachers-services");
-const { getOffset, getPagination } = require("../../helpers/pagination-helper");
+// import
 const { Op } = require("sequelize");
+// model
+const { Teacher, User, Course } = require("../../models");
+// service
+const teacherService = require("../../services/teacher-services");
+// helper
+const { getOffset, getPagination } = require("../../helpers/pagination-helper");
+
 const teacherController = {
   // 取得所有教師
-  /*
-  teacherService.getTeachers(req, (err, data) => {
-      err
-        ? next(err)
-        : res.status(200).json({
-            status: "200",
-            user: req.user ? req.user : "no data",
-            data: data,
-          });
-    });
-  */
   getTeachers: async (req, res, next) => {
     // 排行榜
     const topUsers = await User.findAll({
@@ -25,7 +19,7 @@ const teacherController = {
         ["course_hours", "DESC"],
         ["name", "ASC"],
       ],
-    });    
+    });
     const topTen = topUsers.map((item, index) => {
       return { profile: item.profile, index: index + 1, name: item.name };
     });
@@ -42,7 +36,6 @@ const teacherController = {
             topTen,
           });
     });
-    
   },
   beTeacherPage: (req, res) => {
     res.render("user/beTeacher");

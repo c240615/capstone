@@ -1,4 +1,6 @@
+// model
 const { User } = require("../../models");
+// helper
 const { getOffset, getPagination } = require("../../helpers/pagination-helper");
 
 const adminController = {
@@ -15,9 +17,11 @@ const adminController = {
     })
       .then((users) => {
         const userDatas = users.rows;
-        res.status(200).json( {
+
+        res.status(200).json({
+          status: req.user ? "200" : "206",
+          user: req.user ? req.user : "User did not login.",
           userDatas,
-          pagination: getPagination(limit, page, users.count),
         });
       })
       .catch((err) => {

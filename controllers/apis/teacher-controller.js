@@ -1,5 +1,5 @@
-const { Teacher, User } = require("../../models");
-const teacherService = require("../../services/teachers-services");
+// service
+const teacherService = require("../../services/teacher-services");
 const teacherController = {
   // 取得所有教師
   getTeachers: (req, res, next) => {
@@ -7,9 +7,9 @@ const teacherController = {
       err
         ? next(err)
         : res.status(200).json({
-            status: "200",
-            user: req.user ? req.user : "no data",
-            data: data,
+            status: req.user ? "200" : "206",
+            user: req.user ? req.user : "User did not login.",
+            data,
           });
     });
   },
