@@ -7,7 +7,7 @@ const teacherController = {
       err
         ? next(err)
         : res.status(200).json({
-            status: req.user ? "200" : "206",
+            status:  "200" ,
             user: req.user ? req.user : "User did not login.",
             data
           });

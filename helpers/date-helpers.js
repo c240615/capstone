@@ -1,86 +1,48 @@
-const futureDate = (start, courseDuration) => {
-  // 起始點
-  const startDate = start;
-  // 延後 DELAY 天
-  const change2 = 86400000 * 7;
-  const change3 = 86400000 * 14;
-  // 結束日
-  if (courseDuration === 1) {
-    const endDate1 = new Date(startDate).setHours(18, 0, 0);
-    const endDate2 = new Date(startDate).setHours(19, 0, 0);
-    const endDate3 = new Date(startDate).setHours(20, 0, 0);
-
-    const endDate5 = new Date(startDate + change2).setHours(18, 0, 0);
-    const endDate6 = new Date(startDate + change2).setHours(19, 0, 0);
-    const endDate7 = new Date(startDate + change2).setHours(20, 0, 0);
-
-    const endDate9 = new Date(startDate + change3).setHours(18, 0, 0);
-    const endDate10 = new Date(startDate + change3).setHours(19, 0, 0);
-
-    const endDate11 = new Date(startDate + change3).setHours(20, 0, 0);
-
-    return [
-      endDate1,
-      endDate2,
-      endDate3,
-      endDate5,
-      endDate6,
-      endDate7,
-      endDate9,
-      endDate10,
-      endDate11,
-    ];
-  } else {
-    const endDate1 = new Date(startDate).setHours(18, 0, 0);
-    const endDate2 = new Date(startDate).setHours(19, 0, 0);
-    const endDate3 = new Date(startDate).setHours(20, 0, 0);
-
-    const endDate5 = new Date(startDate + change2).setHours(18, 0, 0);
-    const endDate6 = new Date(startDate + change2).setHours(19, 0, 0);
-    const endDate7 = new Date(startDate + change2).setHours(20, 0, 0);
-
-    const endDate9 = new Date(startDate + change3).setHours(18, 0, 0);
-    const endDate10 = new Date(startDate + change3).setHours(19, 0, 0);
-
-    const endDate11 = new Date(startDate + change3).setHours(20, 0, 0);
-
-    const endDate13 = new Date(startDate).setHours(18, 30, 0);
-    const endDate14 = new Date(startDate).setHours(19, 30, 0);
-    const endDate15 = new Date(startDate).setHours(20, 30, 0);
-
-    const endDate17 = new Date(startDate + change2).setHours(18, 30, 0);
-    const endDate18 = new Date(startDate + change2).setHours(19, 30, 0);
-
-    const endDate19 = new Date(startDate + change2).setHours(20, 30, 0);
-
-    const endDate21 = new Date(startDate + change3).setHours(18, 30, 0);
-
-    const endDate22 = new Date(startDate + change3).setHours(19, 30, 0);
-
-    const endDate23 = new Date(startDate + change3).setHours(20, 30, 0);
-
-    return [
-      endDate1,
-      endDate2,
-      endDate3,
-      endDate5,
-      endDate6,
-      endDate7,
-      endDate9,
-      endDate10,
-      endDate11,
-      endDate13,
-      endDate14,
-      endDate15,
-      endDate17,
-      endDate18,
-      endDate19,
-      endDate21,
-      endDate22,
-      endDate23,
-    ];
+// 取得 課程間隔時間陣列
+const getHours = (startHour, endHour, courseDuration) => {
+  const result = [];
+  for (let i = 0; i < endHour - startHour; i++) {
+    result.push(i + startHour);
+    courseDuration === 1 ? i : (i -= courseDuration);
   }
+  return result;
 };
+// 取得未來 delayDay 的所有課程時間
+const futureDate = (startDate, courseDuration, hourList, delayDay) => {
+  const millisecond = delayDay * 24 * 60 * 60 * 1000;
+  // 預約今天以後的課程
+  if (delayDay !== 0) {
+    const result = hourList.map((hour) => {
+      if (Number.isInteger(hour)) {
+        return new Date(startDate + millisecond).setHours(hour, 0, 0);
+      }
+      return new Date().setHours(hour, 30, 0);
+    });
+    return result;
+  }
+  // 今天能預約的時間
+  const todayHours = hourList.map((hour) => {
+    if (hour > new Date().getHours()) {
+      return hour;
+    }
+    // 不能預約的時間給25
+    return 25;
+  });
+  // 排除不能預約的時間
+  const filterHours = todayHours.filter((item) => {
+    return item !== 25;
+  });
+  // 整理格式
+  const result = filterHours.map((hour) => {
+    if (Number.isInteger(hour)) {
+      return new Date(startDate + millisecond).setHours(hour, 0, 0);
+    }
+    return new Date(startDate + millisecond).setHours(hour, 30, 0);
+  });
+  // 返回毫秒數
+  return result;
+};
+
 // 刪除陣列重複值
 const removeDuplicates = (arr) => {
   for (let i = 0; i < arr.length; i++) {
@@ -90,7 +52,9 @@ const removeDuplicates = (arr) => {
     }
   }
 };
+
 module.exports = {
+  getHours,
   futureDate,
   removeDuplicates,
 };

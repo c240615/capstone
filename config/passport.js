@@ -1,13 +1,13 @@
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const passportJWT = require("passport-jwt");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
-
+// 使用 jwt
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 // set up Passport strategy
 passport.use(
   new LocalStrategy(
@@ -98,6 +98,27 @@ passport.use(
       });
     }
   )
+);
+
+// jwt
+const jwtOptions = {
+  // 設定去哪裡找 token，指定 authorization header 裡的 bearer 項目
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  // 使用密鑰來檢查 token 是否經過纂改
+  secretOrKey: process.env.JWT_SECRET,
+};
+passport.use(
+  new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
+    // 找到使用者以後將其回傳
+    User.findByPk(jwtPayload.id, {
+      include: [
+        { model: Teacher },
+        
+      ],
+    })
+      .then((user) => cb(null, user))
+      .catch((err) => cb(err));
+  })
 );
 
 // serialize and deserialize user

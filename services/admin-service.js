@@ -2,6 +2,7 @@ const { User } = require("../models");
 const { getOffset, getPagination } = require("../helpers/pagination-helper");
 
 const adminService = {
+  // 所有使用者
   getUsers: async (req, cb) => {
     try {
       const DEFAULT_LIMIT = 10;
@@ -23,6 +24,7 @@ const adminService = {
       cb(e);
     }
   },
+  
 };
 
 module.exports = adminService;

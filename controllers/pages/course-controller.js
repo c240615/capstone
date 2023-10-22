@@ -1,5 +1,9 @@
 const { User, Course, Teacher } = require("../../models");
-const { futureDate, removeDuplicates } = require("../../helpers/date-helpers");
+const {
+  getHours,
+  futureDate,
+  removeDuplicates,
+} = require("../../helpers/date-helpers");
 
 const courseController = {
   getReservePage: async (req, res, next) => {
@@ -23,7 +27,7 @@ const courseController = {
         return item.Courses.score !== null;
       });
       if (!courses) {
-        throw new Error("This teacher did not have a course");
+        throw new Error("This teacher did not have a course.");
       }
       // 課程分數
       const scores = scoredCourses.map((item) => {
@@ -41,6 +45,10 @@ const courseController = {
       });
       // 課程持續時間
       const courseDuration = courses[0].courseDuration;
+      // 取得課程間隔時間陣列
+      const startHour = 18;
+      const endHour = 21;
+      const hourList = getHours(startHour, endHour, courseDuration);
       // 老師可預約星期 [{monday:0}]
       const weekdays = await Teacher.findAll({
         raw: true,
@@ -59,7 +67,7 @@ const courseController = {
           "sunday",
         ],
       });
-      //[1,0,1,0,1,1,0] true 1 false 0
+      /*[1,0,1,0,1,1,0] true 1 false 0
       const available = [
         weekdays[0].sunday,
         weekdays[0].monday,
@@ -68,8 +76,8 @@ const courseController = {
         weekdays[0].thursday,
         weekdays[0].friday,
         weekdays[0].saturday,
-      ];
-      // 2 周內可預約時間
+      ];*/
+      
       const today = Date.now();
 
       // 已預約時間 []
@@ -79,8 +87,16 @@ const courseController = {
         })
         .filter((i) => i > today);
 
+      // 未來兩週可預約時間
+      const todayList = futureDate(today, courseDuration, hourList, 0);
+      const week1List = futureDate(today, courseDuration, hourList, 7);
+      const week2List = futureDate(today, courseDuration, hourList, 14);
+
       // 排序並扣除已預約
-      const allDays = futureDate(today, courseDuration).concat(filteredCourses);
+      const allDays = todayList
+        .concat(week1List)
+        .concat(week2List)
+        .concat(filteredCourses);
       const sortDays = allDays.sort((a, b) => a - b);
       removeDuplicates(sortDays);
       const final = sortDays.map((item) => {
@@ -106,10 +122,9 @@ const courseController = {
       nest: true,
       where: { id: teacherId },
     });
-    
+
     const user = await User.findAll({ where: { id: userId } });
 
-    
     const hours = (await user[0].courseHours) + teacher[0].courseDuration;
     await user[0].update({ courseHours: hours });
     await Course.create({
@@ -143,7 +158,7 @@ const courseController = {
             score,
             comment: comment || "no comment",
           });
-        }        
+        }
       })
       .then(() => {
         req.flash("success_messages", "Score was successfully update");
