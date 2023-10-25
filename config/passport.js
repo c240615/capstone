@@ -16,7 +16,6 @@ passport.use(
       passwordField: "password",
       passReqToCallback: true,
     },
-
     (req, email, password, cb) => {
       User.findOne({ where: { email } }).then((user) => {
         if (!user)
@@ -32,6 +31,7 @@ passport.use(
               false,
               req.flash("error_messages", "帳號或密碼輸入錯誤！")
             );
+          console.log(req.user);
           return cb(null, user);
         });
       });
@@ -102,19 +102,17 @@ passport.use(
 
 // jwt
 const jwtOptions = {
-  // 設定去哪裡找 token，指定 authorization header 裡的 bearer 項目
+  // 指定 authorization header 裡的 bearer 項目 攜帶 token
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   // 使用密鑰來檢查 token 是否經過纂改
   secretOrKey: process.env.JWT_SECRET,
+  // 加入 payload 的驗證資訊 optional
 };
 passport.use(
   new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
-    // 找到使用者以後將其回傳
+    // 驗證 token 後找到使用者並將其回傳
     User.findByPk(jwtPayload.id, {
-      include: [
-        { model: Teacher },
-        
-      ],
+      include: [{ model: Teacher }],
     })
       .then((user) => cb(null, user))
       .catch((err) => cb(err));

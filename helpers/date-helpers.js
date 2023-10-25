@@ -1,3 +1,18 @@
+// 篩選星期
+const getWeekdays = (startDate, availableWeekday) => {
+  const todayDay = new Date(startDate).getDay();
+  const result = [];
+  let milli = startDate;
+  for (let i = todayDay; i < todayDay + 7; i++) {
+    if (availableWeekday[i % 7]) {
+      result.push(milli);
+      milli += 24 * 60 * 60 * 1000;
+    }
+    milli += 24 * 60 * 60 * 1000;
+  }
+  return result;
+};
+
 // 取得 課程間隔時間陣列
 const getHours = (startHour, endHour, courseDuration) => {
   const result = [];

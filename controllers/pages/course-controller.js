@@ -67,7 +67,7 @@ const courseController = {
           "sunday",
         ],
       });
-      /*[1,0,1,0,1,1,0] true 1 false 0
+      //[1,0,1,0,1,1,0] true 1 false 0
       const available = [
         weekdays[0].sunday,
         weekdays[0].monday,
@@ -76,7 +76,8 @@ const courseController = {
         weekdays[0].thursday,
         weekdays[0].friday,
         weekdays[0].saturday,
-      ];*/
+      ];
+      console.log(weekdays);
       
       const today = Date.now();
 
@@ -99,6 +100,8 @@ const courseController = {
         .concat(filteredCourses);
       const sortDays = allDays.sort((a, b) => a - b);
       removeDuplicates(sortDays);
+
+      // 整理格式
       const final = sortDays.map((item) => {
         return { date: new Date(item) };
       });

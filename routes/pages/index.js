@@ -23,7 +23,7 @@ router.post("/signup", userController.signUp);
 // 登入
 router.get("/signin", userController.signInPage);
 router.post(
-  "/signin",
+  "/api/signin",
   passport.authenticate("local", {
     failureRedirect: "/signin",
     failureFlash: true,
