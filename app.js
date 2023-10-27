@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();  
+  require("dotenv").config();
 }
 
 // 載入外部套件
@@ -47,9 +47,9 @@ app.use((req, res, next) => {
   res.locals.success_messages = req.flash("success_messages");
   res.locals.error_messages = req.flash("error_messages");
   res.locals.user = getUser(req);
-  // console.log(res)
   next();
 });
+
 
 // 進入分類路由
 app.use("/api", apis);

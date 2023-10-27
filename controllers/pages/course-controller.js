@@ -3,7 +3,7 @@ const {
   getHours,
   futureDate,
   removeDuplicates,
-} = require("../../helpers/date-helpers");
+} = require("../../helpers/date-helpers.js");
 
 const courseController = {
   getReservePage: async (req, res, next) => {

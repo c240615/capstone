@@ -1,14 +1,12 @@
 // service
-const adminService = require("../../services/admin-service");
+const adminService = require("../../services/admin-services.js");
 const adminController = {
   getUsers: async (req, res, next) => {
     await adminService.getUsers(req, (err, data) => {
-      console.log(data.userDatas); // []
       err
         ? next(err)
-        : res.status(200).json({
-            status: "200",
-            user: req.user ? req.user : "User did not login.",
+        : res.json({
+            status: "success",
             data,
           });
     });
@@ -22,9 +20,8 @@ const adminController = {
 
       err
         ? next(err)
-        : res.status(200).json({
-            status: "200",
-            user: req.user ? req.user : "User did not login.",
+        : res.json({
+            status: "success",
             filterData,
           });
     });

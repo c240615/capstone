@@ -1,9 +1,10 @@
-const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
+const bcrypt = require("bcryptjs")
+const userService = require("../../services/user-services.js");
 // model
 const { User, Teacher, Course } = require("../../models");
 // helper
-const { localFileHandler } = require("../../helpers/file-helpers");
+const { localFileHandler } = require("../../helpers/file-helpers.js");
 
 const userController = {
   // 註冊頁
@@ -11,29 +12,14 @@ const userController = {
     res.render("signup");
   },
   // 註冊
-  signUp: (req, res, next) => {
-    if (req.body.password !== req.body.passwordCheck)
-      throw new Error("Passwords do not match!");
-
-    User.findOne({ where: { email: req.body.email } })
-      .then((user) => {
-        if (user) throw new Error("Email already exists!");
-        return bcrypt.hash(req.body.password, 10);
-      })
-      .then((hash) =>
-        User.create({
-          name: req.body.name,
-          email: req.body.email,
-          password: hash,
-        })
-      )
-      .then(() => {
-        req.flash("success_messages", "成功註冊帳號！");
-        res.redirect("/signin");
-      })
-      .catch((err) => {
+  signUp: (req, res, next) => {    
+    userService.signUp(req, (err) => {
+      if (err) {
         next(err);
-      });
+      }
+      req.flash("success_messages", "成功註冊帳號！");
+      res.redirect("/signin");
+    });
   },
   // 登入頁
   signInPage: (req, res) => {
@@ -97,7 +83,7 @@ const userController = {
       const top = topUsers.map((item) => {
         return item.name;
       });
-      const number = top.indexOf(user.name)+1   
+      const number = top.indexOf(user.name) + 1;
 
       res.render("user/profile", {
         user,

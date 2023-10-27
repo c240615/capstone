@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 // controller
-const adminController = require("../../../controllers/pages/admin-controller");
+const adminController = require("../../../controllers/pages/admin-controller.js");
 // 後台搜尋使用者
 router.get("/users/search", adminController.getSearchedUsers);
 // 進入後臺首頁

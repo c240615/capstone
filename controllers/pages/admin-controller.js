@@ -1,6 +1,4 @@
-const { User } = require("../../models");
-const { getOffset, getPagination } = require("../../helpers/pagination-helper");
-const adminService = require("../../services/admin-service");
+const adminService = require("../../services/admin-services.js");
 const adminController = {
   getUsers: (req, res, next) => {
     adminService.getUsers(req, (err, data) => {
@@ -20,7 +18,6 @@ const adminController = {
       const filterData = data.userDatas.filter((data) => {
         return data.name.toLowerCase().includes(keyword);
       });
-
       err
         ? next(err)
         : res.render("admin/filterUsers", {

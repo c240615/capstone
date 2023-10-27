@@ -1,5 +1,5 @@
 const { User } = require("../models");
-const { getOffset, getPagination } = require("../helpers/pagination-helper");
+const { getOffset, getPagination } = require("../helpers/pagination-helper.js");
 
 const adminService = {
   // 所有使用者
@@ -15,7 +15,8 @@ const adminService = {
         limit,
         offset,
       });
-      const userDatas = users.rows;
+      // 去掉密碼
+      const userDatas = users.rows
       return cb(null, {
         userDatas,
         pagination: getPagination(limit, page, users.count),
@@ -24,7 +25,6 @@ const adminService = {
       cb(e);
     }
   },
-  
 };
 
 module.exports = adminService;

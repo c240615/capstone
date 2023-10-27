@@ -1,4 +1,4 @@
-const passport = require("../config/passport"); 
+const passport = require("../config/passport.js"); 
 // 使用者登入認證
 const authenticated = passport.authenticate("jwt", { session: false });
 // admin 登入認證

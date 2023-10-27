@@ -3,8 +3,9 @@ const LocalStrategy = require("passport-local");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passportJWT = require("passport-jwt");
+
 const bcrypt = require("bcryptjs");
-const { User } = require("../models");
+const { User, Teacher } = require("../models");
 // 使用 jwt
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
@@ -31,7 +32,7 @@ passport.use(
               false,
               req.flash("error_messages", "帳號或密碼輸入錯誤！")
             );
-          console.log(req.user);
+          
           return cb(null, user);
         });
       });
@@ -47,11 +48,11 @@ passport.use(
       callbackURL: `${process.env.FACEBOOK_CALLBACK}`,
       profileFields: ["email", "displayName"],
     },
-    (accessToken, refreshToken, profile, done) => {
+    (accessToken, refreshToken, profile, cb) => {
       console.log(profile);
       const { name, email } = profile._json;
       User.findOne({ where: { email } }).then((user) => {
-        if (user) return done(null, user);
+        if (user) return cb(null, user);
         const randomPassword = Math.random().toString(36).slice(-8);
         bcrypt
           .genSalt(10)
@@ -63,8 +64,8 @@ passport.use(
               password: hash,
             })
           )
-          .then((user) => done(null, user))
-          .catch((err) => done(err, false));
+          .then((user) => cb(null, user))
+          .catch((err) => cb(err, false));
       });
     }
   )
@@ -78,10 +79,10 @@ passport.use(
       callbackURL: `${process.env.GOOGLE_CALLBACK}`,
       profileFields: ["email", "displayName"],
     },
-    (accessToken, refreshToken, profile, done) => {
+    (accessToken, refreshToken, profile, cb) => {
       const { name, email } = profile._json;
       User.findOne({ where: { email } }).then((user) => {
-        if (user) return done(null, user);
+        if (user) return cb(null, user);
         const randomPassword = Math.random().toString(36).slice(-8);
         bcrypt
           .genSalt(10)
@@ -93,8 +94,8 @@ passport.use(
               password: hash,
             })
           )
-          .then((user) => done(null, user))
-          .catch((err) => done(err, false));
+          .then((user) => cb(null, user))
+          .catch((err) => cb(err, false));
       });
     }
   )

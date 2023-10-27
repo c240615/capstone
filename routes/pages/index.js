@@ -2,17 +2,20 @@
 // 載入外部套件
 const express = require("express");
 const router = express.Router();
-const passport = require("../../config/passport");
+const passport = require("../../config/passport.js");
 // 載入內部資料
-const admin = require("../pages/modules/admin");
-const teacherController = require("../../controllers/pages/teacher-controller");
-const userController = require("../../controllers/pages/user-controller");
-const courseController = require("../../controllers/pages/course-controller");
-const auth = require("../pages/modules/auth");
+const admin = require("../pages/modules/admin.js");
+const teacherController = require("../../controllers/pages/teacher-controller.js");
+const userController = require("../../controllers/pages/user-controller.js");
+const courseController = require("../../controllers/pages/course-controller.js");
+const auth = require("../pages/modules/auth.js");
 // handler
-const { generalErrorHandler } = require("../../middleware/error-handler");
-const { authenticated, authenticatedAdmin } = require("../../middleware/auth");
-const upload = require("../../middleware/multer");
+const { generalErrorHandler } = require("../../middleware/error-handler.js");
+const {
+  authenticated,
+  authenticatedAdmin,
+} = require("../../middleware/auth.js");
+const upload = require("../../middleware/multer.js");
 
 router.use("/auth", auth);
 // admin
@@ -23,7 +26,7 @@ router.post("/signup", userController.signUp);
 // 登入
 router.get("/signin", userController.signInPage);
 router.post(
-  "/api/signin",
+  "/signin",
   passport.authenticate("local", {
     failureRedirect: "/signin",
     failureFlash: true,
