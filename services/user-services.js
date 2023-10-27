@@ -1,7 +1,7 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const userService = {
-  signUp: async (req, cb) => {
+  signUp: async (req, cb,next) => {
     if (req.body.password !== req.body.passwordCheck)
       throw new Error("Passwords do not match!");
 

@@ -11,8 +11,7 @@ const adminController = {
     });
   },
   getSearchedUsers: async (req, res, next) => {
-    await adminService.getUsers(req, (err, data) => {
-      // 符合搜索的資料
+    await adminService.getUsers(req, (err, data) => {      
       const keyword = req.query.keyword.toLowerCase().trim();
       if (!keyword) throw new Error("Keyword did not exist!");
       const filterData = data.userDatas.filter((data) => {

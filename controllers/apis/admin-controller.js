@@ -1,5 +1,5 @@
 // service
-const adminService = require("../../services/admin-services.js");
+const adminService = require("../../services/admin-services");
 const adminController = {
   getUsers: async (req, res, next) => {
     await adminService.getUsers(req, (err, data) => {

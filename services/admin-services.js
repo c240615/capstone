@@ -3,7 +3,7 @@ const { getOffset, getPagination } = require("../helpers/pagination-helper.js");
 
 const adminService = {
   // 所有使用者
-  getUsers: async (req, cb) => {
+  getUsers: async (req, cb,next) => {
     try {
       const DEFAULT_LIMIT = 10;
       const page = Number(req.query.page) || 1;

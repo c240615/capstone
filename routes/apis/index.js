@@ -1,36 +1,34 @@
 const express = require("express");
 const router = express.Router();
+// upload
 const passport = require("../../config/passport");
-const admin = require("../apis/modules/admin");
+// error
+const { apiErrorHandler } = require("../../middleware/error-handler");
 const {
   authenticated,
   authenticatedAdmin,
-} = require("../../middleware/api-auth.js");
+} = require("../../middleware/api-auth");
+
+const admin = require("../apis/modules/admin");
+
 // controller
 const teacherController = require("../../controllers/apis/teacher-controller.js");
 const userController = require("../../controllers/apis/user-controller.js");
-// error
-const { apiErrorHandler } = require("../../middleware/error-handler");
+
 // routes
-router.use("/admin", /*authenticated, authenticatedAdmin,*/ admin);
-// 前台教師清單
-router.get(
-  "/teachers",
-  //authenticated,
-  //authenticatedAdmin,
-  teacherController.getTeachers
-);
+router.use("/admin", authenticatedAdmin, admin);
+
 // 註冊
-router.post(
-  "/signup",  
-  userController.signUp
-);
+router.post("/signup", userController.signUp);
 // 登入
 router.post(
   "/signin",
   passport.authenticate("local", { session: false }),
   userController.signIn
 );
+
+// 前台教師清單
+router.get("/teachers", authenticated, teacherController.getTeachers);
 // error
 router.use("/", apiErrorHandler);
 

@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
 const userService = require("../../services/user-services.js");
 // model
 const { User, Teacher, Course } = require("../../models");
@@ -12,7 +12,7 @@ const userController = {
     res.render("signup");
   },
   // 註冊
-  signUp: (req, res, next) => {    
+  signUp: (req, res, next) => {
     userService.signUp(req, (err) => {
       if (err) {
         next(err);

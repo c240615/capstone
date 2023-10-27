@@ -7,9 +7,7 @@ module.exports = {
       // 如果不是，直接把字串印出來
       req.flash("error_messages", `${err}`);
     }
-    // 把使用者導回錯誤發生的前一頁
     res.redirect("back");
-    // 把 Error 物件傳給下一個error handler
     next(err);
   },
   apiErrorHandler(err, req, res, next) {
@@ -18,12 +16,15 @@ module.exports = {
         status: "error",
         message: `${err.name}: ${err.message}`,
       });
+      console.log(err)
     } else {
       res.status(500).json({
         status: "error",
         message: `${err}`,
       });
+      console.log(err);
     }
+    console.log(err);
     next(err);
   },
 };
