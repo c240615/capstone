@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Course } = require("../models");
 const bcrypt = require("bcryptjs");
 const userService = {
   signUp: (req, cb) => {
@@ -24,6 +24,22 @@ const userService = {
         cb(e);
       });
   },
-  getUser: () => {},
+  getUser: (req, cb) => {    
+    const id = Number(req.params.id)
+    console.log(id)
+    return User.findOne({
+      raw: true,
+      nest: true,
+      where: { id },
+      include: [Course],
+    })
+      .then((user) => {
+        console.log(user);
+        return cb(null, { user });
+      })
+      .catch((e) => {
+        cb(e);
+      });
+  },
 };
 module.exports = userService;

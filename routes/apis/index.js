@@ -30,7 +30,7 @@ router.post(
 // 前台首頁搜尋教師
 router.get(
   "/teachers/search",
-  authenticated,
+  /*authenticated,*/
   teacherController.getSearchedTeachers
 );
 
@@ -39,7 +39,7 @@ router.get(
 // 取得編輯個人頁
 // 編輯個人資料
 // 個人資料頁
-
+router.get("/users/:id", /*authenticated,*/userController.getUserPage);
 // 老師個人資料頁
 // 預約課程
 // 成為老師頁
@@ -47,7 +47,7 @@ router.get(
 // 留下評論
 
 // 前台教師清單
-router.get("/teachers", authenticated, teacherController.getTeachers);
+router.get("/teachers", /*authenticated,*/ teacherController.getTeachers);
 // error
 router.use("/", apiErrorHandler);
 

@@ -27,8 +27,13 @@ const userController = {
     }
   },
   // 取得使用者資訊
-  getUser: (req,res,next) => {
-    res.send("getUserPage");
+  getUserPage: ( req, res, next) => {
+    userService.getUser(req, (err, data) =>
+    {
+      //console.log(req)
+      err ? next(err) : res.json({ status: "success", data })}
+      
+    );
   },
   // 編輯使用者資訊
 };

@@ -60,33 +60,8 @@ app.use(pages);
 app.listen(port, () => {
   console.log(`Running on http://localhost:${port}`);
 });
-
+// https://www.postman.com/api-evangelist/workspace/data-world/request/35240-6d563252-245e-4b89-bea1-62df74ada697
 const a = {
-  status: "success",
-  keyword: "user1",
-  filterData: [
-    {
-      id: 2,
-      name: "user1",
-      email: "user1@example.com",
-      password: "$2a$10$cZa.zKGKxJ4zri/LZFQmW.Y4FHywHzpTYo3lKNn.CZBfNkvhvpO9.",
-      profile:
-        "https://www.shutterstock.com/image-vector/man-icon-vector-250nw-1040084344.jpg",
-      nation: "ROC",
-      intro:
-        "Quaerat voluptatibus enim.\nIpsum at aut est est velit voluptatem natus sed.\nIllo sit cum voluptatem officiis.",
-      isAdmin: 0,
-      isTeacher: 1,
-      courseHours: 5,
-      createdAt: "2023-10-14T11:14:03.000Z",
-      updatedAt: "2023-10-14T11:14:03.000Z",
-    },
-  ],
-  pagination: {
-    pages: [1, 2, 3, 4],
-    totalPage: 4,
-    currentPage: 1,
-    prev: 1,
-    next: 2,
-  },
+  status: "error",
+  message: "TypeError: Cannot read properties of undefined (reading 'id')",
 };
