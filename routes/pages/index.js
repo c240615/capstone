@@ -45,7 +45,7 @@ router.get(
 router.get(
   "/teachers/search",
   authenticated,
-  teacherController.getFilteredTeachers
+  teacherController.getSearchedTeachers
 );
 // 編輯老師資訊頁
 router.get("/teachers/edit/:id", authenticated, teacherController.getEditPage);

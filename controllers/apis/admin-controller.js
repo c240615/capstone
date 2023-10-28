@@ -24,6 +24,7 @@ const adminController = {
             status: "success",
             keyword,
             filterData,
+            pagination:data.pagination
           });
     });
   },

@@ -53,7 +53,7 @@ const teacherController = {
     } = req.body;
     // 不可空白的資料
     if (!intro || !style || !link || !courseDuration)
-      throw new Error("All data are required!");
+      throw new Error("All datas are required!");
     // 新增老師資料
     await Teacher.create({
       intro: intro.trim(),
@@ -135,7 +135,7 @@ const teacherController = {
     });
   },
   // 前台搜尋老師
-  getFilteredTeachers: async (req, res, next) => {
+  getSearchedTeachers: async (req, res, next) => {
     const keyword = req.query.keyword.toLowerCase().trim();
     const DEFAULT_LIMIT = 9;
     const page = Number(req.query.page) || 1;

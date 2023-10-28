@@ -16,7 +16,7 @@ const teacherController = require("../../controllers/apis/teacher-controller.js"
 const userController = require("../../controllers/apis/user-controller.js");
 
 // routes
-router.use("/admin", authenticated, authenticatedAdmin, admin);
+router.use("/admin", /*authenticated, authenticatedAdmin,*/ admin);
 
 // 註冊
 router.post("/signup", userController.signUp);
@@ -28,13 +28,18 @@ router.post(
 );
 // 開課資訊
 // 前台首頁搜尋教師
+router.get(
+  "/teachers/search",
+  authenticated,
+  teacherController.getSearchedTeachers
+);
+
 // 取得編輯老師資訊頁
 // 編輯老師資訊
 // 取得編輯個人頁
 // 編輯個人資料
 // 個人資料頁
-router.get("/users/:id", authenticated, userController.getUserPage);
-router.get("/teachers/:id", authenticated, teacherController.getTeacherPage);
+
 // 老師個人資料頁
 // 預約課程
 // 成為老師頁

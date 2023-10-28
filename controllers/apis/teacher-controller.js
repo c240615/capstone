@@ -12,8 +12,22 @@ const teacherController = {
           });
     });
   },
-  getTeacherPage: (res) => {
-    res.send("456");
+  getSearchedTeachers: (req, res, next) => {
+    teacherService.getTeachers(req, (err, data) => {
+      const keyword = req.query.keyword.toLowerCase().trim();
+      
+      const filterDatas = data.teacherRows.filter((data) => {
+        return data.User.name.toLowerCase().includes(keyword);
+      });
+      err
+        ? next(err)
+        : res.json({
+            status: "success",
+            keyword,
+            filterDatas,
+            pagination: data.pagination,
+          });
+    });
   },
 };
 module.exports = teacherController;

@@ -1,7 +1,7 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const userService = {
-  signUp:  (req, cb) => {
+  signUp: (req, cb) => {
     if (req.body.password !== req.body.passwordCheck)
       throw new Error("Passwords do not match!");
 
@@ -18,15 +18,12 @@ const userService = {
         })
       )
       .then((user) => {
-        req.flash("success_messages", "成功註冊帳號！"); 
-        return user;
-      })
-      .then((user) => {
         return cb(null, { user });
       })
       .catch((e) => {
         cb(e);
       });
   },
+  getUser: () => {},
 };
 module.exports = userService;

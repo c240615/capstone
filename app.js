@@ -63,47 +63,30 @@ app.listen(port, () => {
 
 const a = {
   status: "success",
-  data: {
-    teacherRows: [
-      {
-        id: 1,
-        intro: "Velit dolores distinctio animi aliquid rerum.",
-        style: "Qui rerum harum atque nisi non et.",
-        link: "Natus et impedit qui sed rerum sed beatae maiores animi.",
-        courseDuration: 0.5,
-        monday: 0,
-        tuesday: 0,
-        wednesday: 0,
-        thursday: 0,
-        friday: 0,
-        saturday: 0,
-        sunday: 1,
-        createdAt: "2023-10-14T11:14:03.000Z",
-        updatedAt: "2023-10-19T04:42:48.000Z",
-        userId: 1,
-        User: {
-          id: 1,
-          name: "root",
-          email: "root@example.com",
-          password:
-            "$2a$10$XAyJzmKDU1jEPOOFjlWvo.lvmh3/wYHbrW.SJNe5r6QL4P7p5psRy",
-          profile: "/upload/äººç©.jpg",
-          nation: "ROC",
-          intro: "Voluptatem suscipit nostrumm qui.",
-          isAdmin: 1,
-          isTeacher: 1,
-          courseHours: 5,
-          createdAt: "2023-10-14T11:14:03.000Z",
-          updatedAt: "2023-10-17T03:30:12.000Z",
-        },
-      },
-    ],
-    pagination: {
-      pages: [1, 2],
-      totalPage: 2,
-      currentPage: 1,
-      prev: 1,
-      next: 2,
+  keyword: "user1",
+  filterData: [
+    {
+      id: 2,
+      name: "user1",
+      email: "user1@example.com",
+      password: "$2a$10$cZa.zKGKxJ4zri/LZFQmW.Y4FHywHzpTYo3lKNn.CZBfNkvhvpO9.",
+      profile:
+        "https://www.shutterstock.com/image-vector/man-icon-vector-250nw-1040084344.jpg",
+      nation: "ROC",
+      intro:
+        "Quaerat voluptatibus enim.\nIpsum at aut est est velit voluptatem natus sed.\nIllo sit cum voluptatem officiis.",
+      isAdmin: 0,
+      isTeacher: 1,
+      courseHours: 5,
+      createdAt: "2023-10-14T11:14:03.000Z",
+      updatedAt: "2023-10-14T11:14:03.000Z",
     },
+  ],
+  pagination: {
+    pages: [1, 2, 3, 4],
+    totalPage: 4,
+    currentPage: 1,
+    prev: 1,
+    next: 2,
   },
 };
