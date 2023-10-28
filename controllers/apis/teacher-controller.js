@@ -12,5 +12,8 @@ const teacherController = {
           });
     });
   },
+  getTeacherPage: (res) => {
+    res.send("456");
+  },
 };
 module.exports = teacherController;

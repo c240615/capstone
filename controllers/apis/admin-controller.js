@@ -22,6 +22,7 @@ const adminController = {
         ? next(err)
         : res.json({
             status: "success",
+            keyword,
             filterData,
           });
     });

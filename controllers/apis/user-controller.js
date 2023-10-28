@@ -27,6 +27,9 @@ const userController = {
     }
   },
   // 取得使用者資訊
+  getUserPage: (req,res,next) => {
+    res.send("getUserPage");
+  },
   // 編輯使用者資訊
 };
 module.exports = userController;
