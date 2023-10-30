@@ -1,5 +1,6 @@
 // service
-const teacherService = require("../../services/teacher-services");
+const teacherService = require("../../services/teacher-services.js");
+
 const teacherController = {
   // 取得所有教師
   getTeachers: (req, res, next) => {

@@ -2,8 +2,8 @@
 // 載入外部套件
 const express = require("express");
 const router = express.Router();
-const passport = require("../../config/passport.js");
 // 載入內部資料
+const passport = require("../../config/passport.js");
 const admin = require("../pages/modules/admin.js");
 const teacherController = require("../../controllers/pages/teacher-controller.js");
 const userController = require("../../controllers/pages/user-controller.js");
@@ -53,7 +53,7 @@ router.put("/teachers/edit/:id", authenticated, teacherController.putTeacher);
 // 編輯個人資訊頁
 router.get("/users/edit/:id", authenticated, userController.getEditPage);
 router.put(
-  "/users/putedit/:id",
+  "/users/putEdit/:id",
   authenticated,
   upload.single("profile"),
   userController.putUser

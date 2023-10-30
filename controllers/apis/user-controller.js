@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
-const userService = require("../../services/user-services");
+// service
+const userService = require("../../services/user-services.js");
+
 const userController = {
   // 註冊
   signUp: (req, res, next) => {
@@ -15,26 +17,28 @@ const userController = {
       const token = jwt.sign(userData, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });
-      res.json({
+      return res.json({
         status: "success",
         data: {
           token,
           user: userData,
         },
       });
-    } catch (err) {
-      next(err);
+    } catch (e) {
+      next(e);
     }
   },
-  // 取得使用者資訊
-  getUserPage: ( req, res, next) => {
+  // 目前登入的使用者資訊
+  getUser: (req, res, next) => {
     userService.getUser(req, (err, data) =>
-    {
-      //console.log(req)
-      err ? next(err) : res.json({ status: "success", data })}
-      
+      err ? next(err) : res.json({ status: "success", data })
     );
   },
   // 編輯使用者資訊
+  putUser: (req, res, next) => {
+    userService.putUser(req, (err, data) => {
+      err ? next(err) : res.json({ status: "success", data });
+    });
+  },
 };
 module.exports = userController;

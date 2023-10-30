@@ -11,20 +11,21 @@ module.exports = {
     next(err);
   },
   apiErrorHandler(err, req, res, next) {
+    console.log(0, err);
     if (err instanceof Error) {
-      res.status(err.statusCode || 500).json({
+      console.log(1,err)
+      res.status(500).json({
         status: "error",
         message: `${err.name}: ${err.message}`,
       });
-      console.log(err)
     } else {
+      console.log(2, err);
       res.status(500).json({
         status: "error",
         message: `${err}`,
-      });
-      console.log(err);
+      });      
     }
-    console.log(err);
+    console.log(3, err);
     next(err);
   },
 };

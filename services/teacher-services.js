@@ -1,6 +1,7 @@
-const { Teacher, User } = require("../models");
-const { getOffset, getPagination } = require("../helpers/pagination-helper.js");
+const { User, Teacher, Course } = require("../models");
 const { Op } = require("sequelize");
+const { getOffset, getPagination } = require("../helpers/pagination-helper.js");
+
 const teacherService = {
   // 取得所有教師
   getTeachers: async (req, cb) => {
@@ -17,7 +18,7 @@ const teacherService = {
         offset,
       });
       // 去掉密碼
-      const teacherRows = teachers.rows
+      const teacherRows = teachers.rows;
       return cb(null, {
         teacherRows,
         pagination: getPagination(limit, page, teachers.count),

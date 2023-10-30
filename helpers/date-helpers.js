@@ -69,6 +69,7 @@ const removeDuplicates = (arr) => {
 };
 
 module.exports = {
+  
   getHours,
   futureDate,
   removeDuplicates,

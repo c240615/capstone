@@ -3,9 +3,9 @@ const { Op } = require("sequelize");
 // model
 const { Teacher, User, Course } = require("../../models");
 // service
-const teacherService = require("../../services/teacher-services");
+const teacherService = require("../../services/teacher-services.js");
 // helper
-const { getOffset, getPagination } = require("../../helpers/pagination-helper");
+const { getOffset, getPagination } = require("../../helpers/pagination-helper.js");
 
 const teacherController = {
   // 取得所有教師

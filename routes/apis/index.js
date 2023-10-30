@@ -3,13 +3,14 @@ const router = express.Router();
 // upload
 const passport = require("../../config/passport");
 // error
-const { apiErrorHandler } = require("../../middleware/error-handler");
+const { apiErrorHandler } = require("../../middleware/error-handler.js");
 const {
   authenticated,
   authenticatedAdmin,
-} = require("../../middleware/api-auth");
+} = require("../../middleware/api-auth.js");
 
-const admin = require("../apis/modules/admin");
+const upload = require("../../middleware/multer.js");
+const admin = require("../apis/modules/admin.js");
 
 // controller
 const teacherController = require("../../controllers/apis/teacher-controller.js");
@@ -23,7 +24,11 @@ router.post("/signup", userController.signUp);
 // 登入
 router.post(
   "/signin",
-  passport.authenticate("local", { session: false }),
+  passport.authenticate("local", {
+    session: false,
+    failureMessage: true,
+    failureRedirect: "/signin",
+  }),
   userController.signIn
 );
 // 開課資訊
@@ -37,9 +42,14 @@ router.get(
 // 取得編輯老師資訊頁
 // 編輯老師資訊
 // 取得編輯個人頁
-// 編輯個人資料
+router.put(
+  "/users/putEdit/:id",
+  /*authenticated,*/
+  upload.single("profile"),
+  userController.putUser
+);
 // 個人資料頁
-router.get("/users/:id", /*authenticated,*/userController.getUserPage);
+router.get("/users/:id", authenticated, userController.getUser);
 // 老師個人資料頁
 // 預約課程
 // 成為老師頁

@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const bcrypt = require("bcryptjs");
+// service
 const userService = require("../../services/user-services.js");
 // model
 const { User, Teacher, Course } = require("../../models");
@@ -42,97 +42,40 @@ const userController = {
   },
   // 使用者資訊頁
   getUserPage: async (req, res, next) => {
-    try {
-      // 學生基本資料
-      const user = await User.findOne({
-        raw: true,
-        nest: true,
-        where: { id: req.user.id },
-        include: [Course],
-      });
-      // 未完成課程老師的使用者資料
-      const notDoneCourses = await Course.findAll({
-        raw: true,
-        nest: true,
-        where: { userId: req.user.id, isDone: false },
-        include: [{ model: Teacher, include: [{ model: User }] }],
-      });
-
-      // 已完成未評分課程老師的使用者資料
-      const notRatedCourses = await Course.findAll({
-        raw: true,
-        nest: true,
-        where: {
-          [Op.and]: [
-            { userId: req.user.id },
-            { score: null },
-            { isDone: true },
-          ],
-        },
-        include: [{ model: Teacher, include: [{ model: User }] }],
-      });
-      // 學習名次
-      const topUsers = await User.findAll({
-        raw: true,
-        nest: true,
-        order: [
-          ["course_hours", "DESC"],
-          ["name", "ASC"],
-        ],
-      });
-      const top = topUsers.map((item) => {
-        return item.name;
-      });
-      const number = top.indexOf(user.name) + 1;
-
-      res.render("user/profile", {
-        user,
-        notDoneCourses,
-        notRatedCourses,
-        number,
-      });
-    } catch (e) {
-      next(e);
-    }
+    userService.getUser(req, (err, data) => {
+      err
+        ? next(err)
+        : res.render("user/profile", {
+            user: data.user,
+            notDoneCourses: data.notDoneCourses,
+            notRatedCourses: data.notRatedCourses,
+            number: data.number,
+          });
+    });
   },
   // 編輯頁
-  getEditPage: async (req, res, next) => {
-    return await User.findByPk(req.params.id, {
-      raw: true,
-      nest: true,
-    })
-      .then((user) => {
-        if (!user) throw new Error("user didn't exist!");
-
-        res.render("user/edit", { user });
-      })
-      .catch((err) => next(err));
+  getEditPage: (req, res, next) => {
+    userService.getUser(req, (err, data) => {
+      err
+        ? next(err)
+        : res.render("user/edit", {
+            user: data.user,
+            notDoneCourses: data.notDoneCourses,
+            notRatedCourses: data.notRatedCourses,
+            number: data.number,
+          });
+    });
   },
   // 編輯使用者資訊
   putUser: (req, res, next) => {
-    const { name, nation, intro } = req.body;
-    if (!name || !nation || !intro) throw new Error("User name is required!");
-    const { file } = req;
-    Promise.all([User.findByPk(req.params.id), localFileHandler(file)]).then(
-      ([user, filePath]) => {
-        if (!user) throw new Error("user didn't exist!");
-        return user
-          .update({
-            name,
-            nation,
-            intro,
-            profile: filePath || user.profile,
-          })
-          .then(() => {
-            req.flash("success_messages", "user was successfully to update");
-            res.redirect(`/users/${req.params.id}`);
-          })
-          .catch((err) => {
-            req.flash("error_messages", "user was not successfully to update");
-            next(err);
-          });
+    userService.putUser(req, (err) => {
+      if (err) {
+        req.flash("error_messages", "編輯失敗！");
+        next(err);
       }
-    );
+      req.flash("success_messages", "編輯成功！");
+      res.redirect(`/users/${req.params.id}`);
+    });
   },
 };
 module.exports = userController;

@@ -1,9 +1,10 @@
-const { User } = require("../models");
+const { User, Teacher, Course } = require("../models");
+const { Op } = require("sequelize");
 const { getOffset, getPagination } = require("../helpers/pagination-helper.js");
 
 const adminService = {
   // 所有使用者
-  getUsers: async (req, cb,next) => {
+  getUsers: async (req, cb, next) => {
     try {
       const DEFAULT_LIMIT = 10;
       const page = Number(req.query.page) || 1;
@@ -16,7 +17,7 @@ const adminService = {
         offset,
       });
       // 去掉密碼
-      const userDatas = users.rows
+      const userDatas = users.rows;
       return cb(null, {
         userDatas,
         pagination: getPagination(limit, page, users.count),
