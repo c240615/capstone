@@ -9,7 +9,6 @@ const userService = {
   signUp: (req, cb) => {
     if (req.body.password !== req.body.passwordCheck)
       throw new Error("Passwords do not match!");
-
     return User.findOne({ where: { email: req.body.email } })
       .then((user) => {
         if (user) throw new Error("Email already exists!");
@@ -40,21 +39,30 @@ const userService = {
         where: { id },
         include: [Course],
       });
+      delete user.password;
       // 未完成課程老師的使用者資料
-      const notDoneCourses = await Course.findAll({
+      const notDoneCoursesData = await Course.findAll({
         raw: true,
         nest: true,
         where: { userId: id, isDone: false },
         include: [{ model: Teacher, include: [{ model: User }] }],
       });
+      const notDoneCourses = notDoneCoursesData.map((item) => {
+        delete item.Teacher.User.password;
+        return item;
+      });
       // 已完成未評分課程老師的使用者資料
-      const notRatedCourses = await Course.findAll({
+      const notRatedCoursesData = await Course.findAll({
         raw: true,
         nest: true,
         where: {
           [Op.and]: [{ userId: id }, { score: null }, { isDone: true }],
         },
         include: [{ model: Teacher, include: [{ model: User }] }],
+      });
+      const notRatedCourses = notRatedCoursesData.map((item) => {
+        delete item.Teacher.User.password;
+        return item;
       });
       // 學習名次
       const topUsers = await User.findAll({
@@ -68,7 +76,7 @@ const userService = {
       const top = topUsers.map((item) => {
         return item.name;
       });
-      // 找 name 的 index
+
       const number = top.indexOf(user.name) + 1;
       return cb(null, {
         user,

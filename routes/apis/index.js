@@ -50,9 +50,11 @@ router.put(
 );
 // 個人資料頁
 router.get("/users/:id", authenticated, userController.getUser);
-// 老師個人資料頁
+// 編輯老師個人資料
+
 // 預約課程
-// 成為老師頁
+// 成為老師
+router.post("/beTeacher/:id", /*authenticated, */teacherController.postBeTeacher);
 // 新增一筆老師資料
 // 留下評論
 

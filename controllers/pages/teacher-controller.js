@@ -5,7 +5,10 @@ const { Teacher, User, Course } = require("../../models");
 // service
 const teacherService = require("../../services/teacher-services.js");
 // helper
-const { getOffset, getPagination } = require("../../helpers/pagination-helper.js");
+const {
+  getOffset,
+  getPagination,
+} = require("../../helpers/pagination-helper.js");
 
 const teacherController = {
   // 取得所有教師
@@ -33,10 +36,20 @@ const teacherController = {
           });
     });
   },
-  beTeacherPage: (res) => {
-    res.render("user/beTeacher");
+  beTeacherPage: (req, res) => {
+    
+    res.render("user/beTeacher")
   },
   postBeTeacher: async (req, res, next) => {
+    /*
+    teacherService.getTeachers(req, (err, data) => {
+      err
+        ? next(err)
+        : res.render("user/beTeacher", {
+            teacherDatas: data.teacherRows,
+          });
+    });
+    */
     // 取得使用者輸入資料
     const {
       intro,

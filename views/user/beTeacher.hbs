@@ -1,4 +1,4 @@
-<form method="POST" action="/beTeacher">
+<form method="POST" action="/api/beTeacher/{{user.id}}">
   <!--intro-->
   <div class="mb-3">
     <label for="intro" class="form-label">你的課程介紹</label>
@@ -37,16 +37,23 @@
   <!--link-->
   <div class="mb-3">
     <label for="link" class="form-label">你的課程連結</label>
-    <input type="text" class="form-control" id="link" name="link" placeholder="Your Course Link"/>
+    <input
+      type="text"
+      class="form-control"
+      id="link"
+      name="link"
+      placeholder="Your Course Link"
+    />
   </div>
   <!--appointment-->
   <div class="mb-3">
     <label for="link" class="form-label">開放預約時間</label>
-    <!-- Sunday -->
+
+    <!-- Sunday teacherDatas-->
     <div class="input-group">
       <div class="input-group-text bg-danger">
         <input
-          class="form-check-input mt-0 "
+          class="form-check-input mt-0"
           type="checkbox"
           value="true"
           aria-label="Radio button for following text input"
