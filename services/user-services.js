@@ -1,15 +1,18 @@
+// sequelize
+const { Op } = require("sequelize");
 // model
 const { User, Teacher, Course } = require("../models");
 // helper
 const { localFileHandler } = require("../helpers/file-helpers.js");
-const { Op } = require("sequelize");
+// bcryptjs
 const bcrypt = require("bcryptjs");
+
 const userService = {
   // 註冊
-  signUp: (req, cb) => {
+  signUp: async (req, cb) => {
     if (req.body.password !== req.body.passwordCheck)
       throw new Error("Passwords do not match!");
-    return User.findOne({ where: { email: req.body.email } })
+    return await User.findOne({ where: { email: req.body.email } })
       .then((user) => {
         if (user) throw new Error("Email already exists!");
         return bcrypt.hash(req.body.password, 10);
@@ -28,11 +31,11 @@ const userService = {
         cb(e);
       });
   },
-  // 現在登入的使用者資料
+  // 當前使用者基本資料
   getUser: async (req, cb) => {
-    const id = Number(req.params.id);
     try {
-      // 當前使用者基本資料
+      const id = Number(req.params.id);
+      if (!id) throw new Error("Id did not exist!");
       const user = await User.findOne({
         raw: true,
         nest: true,
@@ -40,7 +43,18 @@ const userService = {
         include: [Course],
       });
       delete user.password;
-      // 未完成課程老師的使用者資料
+      return cb(null, {
+        user,
+      });
+    } catch (e) {
+      cb(e);
+    }
+  },
+  // 未完成課程老師的使用者資料
+  getNotDoneCourses: async (req, cb) => {
+    try {
+      const id = Number(req.params.id);
+      if (!id) throw new Error("Id did not exist!");
       const notDoneCoursesData = await Course.findAll({
         raw: true,
         nest: true,
@@ -51,7 +65,16 @@ const userService = {
         delete item.Teacher.User.password;
         return item;
       });
-      // 已完成未評分課程老師的使用者資料
+      return cb(null, { notDoneCourses });
+    } catch (e) {
+      cb(e);
+    }
+  },
+  // 已完成未評分課程老師的使用者資料
+  getNotRatedCourses: async (req, cb) => {
+    try {
+      const id = Number(req.params.id);
+      if (!id) throw new Error("Id did not exist!");
       const notRatedCoursesData = await Course.findAll({
         raw: true,
         nest: true,
@@ -64,7 +87,21 @@ const userService = {
         delete item.Teacher.User.password;
         return item;
       });
-      // 學習名次
+      return cb(null, { notRatedCourses });
+    } catch (e) {
+      cb(e);
+    }
+  },
+  // 學習名次
+  getRanking: async (req, cb) => {
+    try {
+      const id = Number(req.params.id);
+      if (!id) throw new Error("Id did not exist!");
+      const user = await User.findOne({
+        raw: true,
+        nest: true,
+        where: { id },
+      });
       const topUsers = await User.findAll({
         raw: true,
         nest: true,
@@ -73,17 +110,32 @@ const userService = {
           ["name", "ASC"],
         ],
       });
-      const top = topUsers.map((item) => {
+      const topName = topUsers.map((item) => {
         return item.name;
       });
-
-      const number = top.indexOf(user.name) + 1;
-      return cb(null, {
-        user,
-        notDoneCourses,
-        notRatedCourses,
-        number,
+      const ranking = topName.indexOf(user.name) + 1;
+      return cb(null, { ranking });
+    } catch (e) {
+      cb(e);
+    }
+  },
+  // 排行榜
+  getTopUsers: async (req, cb) => {
+    try {
+      const topUsers = await User.findAll({
+        raw: true,
+        nest: true,
+        limit: 10,
+        order: [
+          ["course_hours", "DESC"],
+          ["name", "ASC"],
+        ],
       });
+      if (!topUsers) throw new Error("No data!");
+      const topTen = topUsers.map((item, index) => {
+        return { profile: item.profile, index: index + 1, name: item.name };
+      });
+      return cb(null, { topTen });
     } catch (e) {
       cb(e);
     }
@@ -92,7 +144,7 @@ const userService = {
   putUser: (req, cb) => {
     const { file } = req;
     const { name, nation, intro } = req.body;
-    if (!name || !nation || !intro) throw new Error("User name is required!");
+    if (!name || !nation || !intro) throw new Error("All datas are required!");
     Promise.all([User.findByPk(req.params.id), localFileHandler(file)]).then(
       ([user, filePath]) => {
         if (!user) throw new Error("user didn't exist!");
@@ -104,6 +156,7 @@ const userService = {
             profile: filePath || user.profile,
           })
           .then((user) => {
+            delete user.dataValues.password;
             cb(null, { user });
           })
           .catch((e) => {

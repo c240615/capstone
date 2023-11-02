@@ -67,7 +67,7 @@ router.get("/teachers/:id", authenticated, teacherController.getTeacherPage);
 router.post("/reserve/:id", authenticated, courseController.postCourse);
 // 成為老師
 router.get("/beTeacher", authenticated, teacherController.beTeacherPage);
-router.post("/beTeacher", authenticated, teacherController.postBeTeacher);
+router.post("/beTeacher/:id", authenticated, teacherController.postBeTeacher);
 // 評論
 router.post("/comment", authenticated, courseController.postScore);
 // 進入前台首頁

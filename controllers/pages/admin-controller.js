@@ -11,20 +11,18 @@ const adminController = {
     });
   },
   getSearchedUsers: async (req, res, next) => {
-    await adminService.getUsers(req, (err, data) => {      
-      const keyword = req.query.keyword.toLowerCase().trim();
-      if (!keyword) throw new Error("Keyword did not exist!");
-      const filterData = data.userDatas.filter((data) => {
-        return data.name.toLowerCase().includes(keyword);
-      });
+    adminService.getSearchedUsers(req, (err, data) => {      
       err
         ? next(err)
         : res.render("admin/filterUsers", {
-            status: "200",
-            user: req.user ? req.user : "User did not login.",
-            filterData,
+            keyword: data.keyword,
+            filterDatas: data.filterDatas,
+            pagination: data.pagination,
           });
     });
+    
+    
+    
   },
 };
 module.exports = adminController;

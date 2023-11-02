@@ -3,7 +3,7 @@ const adminService = require("../../services/admin-services.js");
 
 const adminController = {
   getUsers: async (req, res, next) => {
-    await adminService.getUsers(req, (err, data) => {
+    await adminService.getUsers(req, (err, data) => {      
       err
         ? next(err)
         : res.json({
@@ -13,19 +13,12 @@ const adminController = {
     });
   },
   getSearchedUsers: async (req, res, next) => {
-    await adminService.getUsers(req, (err, data) => {
-      const keyword = req.query.keyword.toLowerCase().trim();
-      const filterData = data.userDatas.filter((data) => {
-        return data.name.toLowerCase().includes(keyword);
-      });
-
+    await adminService.getSearchedUsers(req, (err, data) => {
       err
         ? next(err)
         : res.json({
             status: "success",
-            keyword,
-            filterData,
-            pagination:data.pagination
+            data
           });
     });
   },

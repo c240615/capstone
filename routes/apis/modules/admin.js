@@ -8,6 +8,6 @@ router.get("/users/search", adminController.getSearchedUsers);
 // 進入後臺首頁
 router.get("/users", adminController.getUsers);
 
-router.use("", (req, res) => res.redirect("/admin/users"));
+router.use("/", (req, res) => res.redirect("/admin/users"));
 
 module.exports = router;

@@ -1,31 +1,20 @@
-// import
-const { Op } = require("sequelize");
 // model
-const { Teacher, User, Course } = require("../../models");
+const { Teacher, User } = require("../../models");
 // service
 const teacherService = require("../../services/teacher-services.js");
-// helper
-const {
-  getOffset,
-  getPagination,
-} = require("../../helpers/pagination-helper.js");
+const userService = require("../../services/user-services.js");
 
 const teacherController = {
   // 取得所有教師
   getTeachers: async (req, res, next) => {
     // 排行榜
-    const topUsers = await User.findAll({
-      raw: true,
-      nest: true,
-      limit: 10,
-      order: [
-        ["course_hours", "DESC"],
-        ["name", "ASC"],
-      ],
+    const topTen = await userService.getTopUsers(req, (err, data) => {
+      if (err) {
+        next(err);
+      }
+      return data.topTen;
     });
-    const topTen = topUsers.map((item, index) => {
-      return { profile: item.profile, index: index + 1, name: item.name };
-    });
+    // 所有教師
     await teacherService.getTeachers(req, (err, data) => {
       err
         ? next(err)
@@ -36,156 +25,77 @@ const teacherController = {
           });
     });
   },
+  // 成為老師頁
   beTeacherPage: (req, res) => {
-    
-    res.render("user/beTeacher")
+    res.render("user/beTeacher");
   },
-  postBeTeacher: async (req, res, next) => {
-    /*
-    teacherService.getTeachers(req, (err, data) => {
+  // 成為老師
+  postBeTeacher: (req, res, next) => {
+    teacherService.postBeTeacher(req, (err) => {
+      if (err) {
+        next(err);
+      }
+      req.flash("success_messages", "Teacher was successfully created");
+      res.redirect("/teachers");
+    });
+  },
+  // 教師課程資料
+  getTeacherPage: async (req, res, next) => {
+    const averageScore = await teacherService.getScore(req, (err, data) => {
+      if (err) {
+        next(err);
+      }
+      return data.averageScore;
+    });
+    const notDoneCourses = await teacherService.getNotDoneCourses(
+      req,
+      (err, data) => {
+        if (err) {
+          next(err);
+        }
+        return data.notDoneCourses;
+      }
+    );
+    const style = await teacherService.getTeacher(req, (err, data) => {
+      if (err) {
+        next(err);
+      }
+      return data.teacher.style;
+    });
+    await teacherService.getScoredCourses(req, (err, data) => {
       err
         ? next(err)
-        : res.render("user/beTeacher", {
-            teacherDatas: data.teacherRows,
+        : res.render("user/teacher", {
+            averageScore,
+            notDoneCourses,
+            style,
+            scoredCourses: data.scoredCourses,
           });
-    });
-    */
-    // 取得使用者輸入資料
-    const {
-      intro,
-      style,
-      link,
-      courseDuration,
-      monday,
-      tuesday,
-      wednesday,
-      thursday,
-      friday,
-      saturday,
-      sunday,
-    } = req.body;
-    // 不可空白的資料
-    if (!intro || !style || !link || !courseDuration)
-      throw new Error("All datas are required!");
-    // 新增老師資料
-    await Teacher.create({
-      intro: intro.trim(),
-      style: style.trim(),
-      link: link.trim(),
-      courseDuration: Number(courseDuration),
-      monday: monday || false,
-      tuesday: tuesday || false,
-      wednesday: wednesday || false,
-      thursday: thursday || false,
-      friday: friday || false,
-      saturday: saturday || false,
-      sunday: sunday || false,
-      userId: req.user.id,
-    })
-      .then(() => {
-        req.flash("success_messages", "Teacher was successfully created");
-        res.redirect("/teachers");
-      })
-      .catch((err) => next(err));
-    // 改變 user is_teacher
-    await User.findByPk(req.user.id)
-      .then((user) => {
-        user.update({ isTeacher: true });
-      })
-      .then(() => {
-        req.flash("success_messages", "User is teacher now!");
-      })
-      .catch((err) => {
-        next(err);
-      });
-  },
-  getTeacherPage: async (req, res) => {
-    const userId = req.user.id;
-    // 老師的課程平均分數
-    const courses = await Course.findAll({
-      raw: true,
-      nest: true,
-      where: { teacherId: userId, isDone: true },
-      include: [Teacher],
-    });
-    const scoreArray = courses.map((item) => {
-      return item.score;
-    });
-    let total = 0;
-    for (let i = 0; i < scoreArray.length; i++) {
-      total += scoreArray[i];
-    }
-    const averageScore = total / scoreArray.length;
-
-    // isDone = false 的課程
-    const notDoneCourses = await Course.findAll({
-      raw: true,
-      nest: true,
-      where: { teacherId: userId, isDone: false },
-      include: [Teacher, User],
-    });
-    // 課程風格
-    const teacher = await Teacher.findAll({
-      raw: true,
-      nest: true,
-      where: { id: userId },
-    });
-    const style = teacher[0];
-    // 已評分的課程
-    const scoredCourses = await Course.findAll({
-      raw: true,
-      nest: true,
-      where: {
-        [Op.and]: [{ teacherId: userId }, { score: { [Op.not]: null } }],
-      },
-      include: [Teacher],
-    });
-    res.render("user/teacher", {
-      averageScore,
-      notDoneCourses,
-      style,
-      scoredCourses,
     });
   },
   // 前台搜尋老師
   getSearchedTeachers: async (req, res, next) => {
-    const keyword = req.query.keyword.toLowerCase().trim();
-    const DEFAULT_LIMIT = 9;
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || DEFAULT_LIMIT;
-    const offset = getOffset(limit, page);
-    await Teacher.findAndCountAll({
-      raw: true,
-      nest: true,
-      include: [User],
-      limit,
-      offset,
-    })
-      .then((teachers) => {
-        const filteredTeachers = teachers.rows.filter((data) => {
-          return data.User.name.toLowerCase().includes(keyword);
-        });
-        const count =
-          filteredTeachers.length / DEFAULT_LIMIT < 9
-            ? 1
-            : Math.floor(filteredTeachers.length / DEFAULT_LIMIT);
-        if (!filteredTeachers.length) {
-          res.render("filteredTeachers", {
-            filteredTeachers,
-            keyword,
-            pagination: getPagination(limit, page, count),
-          });
-        } else {
-          res.render("filteredTeachers", {
-            filteredTeachers,
-            keyword,
-            pagination: getPagination(limit, page, count),
-          });
+    try {
+      // 排行榜
+      const topTen = await userService.getTopUsers(req, (err, data) => {
+        if (err) {
+          next(err);
         }
-      })
-      .catch((err) => {
-        next(err);
+        return data.topTen;
       });
+
+      await teacherService.getSearchedTeachers(req, (err, data) => {
+        err
+          ? next(err)
+          : res.render("filteredTeachers", {
+              filterDatas: data.filterDatas,
+              pagination: data.pagination,
+              topTen,
+            });
+      });
+    } catch (e) {
+      next(e);
+    }
   },
   getEditPage: async (req, res, next) => {
     return await Teacher.findByPk(req.params.id, {
@@ -248,26 +158,3 @@ const teacherController = {
   },
 };
 module.exports = teacherController;
-/*   
-    Promise.all([User.findByPk(req.params.id), localFileHandler(file)]).then(
-      ([user, filePath]) => {
-        if (!user) throw new Error("user didn't exist!");
-        return user
-          .update({
-            name,
-            nation,
-            intro,
-            profile: filePath || user.profile,
-          })
-          .then(() => {
-            req.flash("success_messages", "user was successfully to update");
-            res.redirect(`/users/${req.params.id}`);
-          })
-          .catch((err) => {
-            req.flash("error_messages", "user was not successfully to update");
-            next(err);
-          });
-      }
-    );
-    
-    */

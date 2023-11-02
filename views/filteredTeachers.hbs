@@ -29,7 +29,7 @@
             </form>
           </div>
 
-          {{#each filteredTeachers}}
+          {{#each filterDatas}}
             <div class="col-4" style="height: 550px">
               <div class="p-3 border bg-light h-100 d-inline-block">
                 <img
@@ -56,6 +56,31 @@
       </div>
     </div>
 
+    <!--排行榜-->
+    <div class="col-4 p-3">
+      <ul class="list-group">
+        <h3>學習時數總排行</h3>
+        {{#each topTen}}
+          <li class="list-group-item">
+            <div class="row justify-content-start align-items-center">
+              <div class="row col-2 align-items-center m-0 p-0" style="width:50px;height:50px;">
+                <img
+                  class="card-img-top img-fluid"
+                  src="{{this.profile}}"
+                  alt="image"
+                />
+              </div>
+              <div class="col-2">
+                NO.{{this.index}}
+              </div>
+              <div class="col-4 w-auto">
+                {{this.name}}
+              </div>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
     
     <!--分頁器-->
     <div class="mt-3 d-flex justify-content-center align-items-end">

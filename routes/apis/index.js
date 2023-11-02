@@ -17,7 +17,7 @@ const teacherController = require("../../controllers/apis/teacher-controller.js"
 const userController = require("../../controllers/apis/user-controller.js");
 
 // routes
-router.use("/admin", /*authenticated, authenticatedAdmin,*/ admin);
+router.use("/admin", authenticated, authenticatedAdmin, admin);
 
 // 註冊
 router.post("/signup", userController.signUp);
@@ -26,40 +26,61 @@ router.post(
   "/signin",
   passport.authenticate("local", {
     session: false,
-    failureMessage: true,
-    failureRedirect: "/signin",
+    //failureMessage: true,
+    //failureRedirect: "/signin",
   }),
   userController.signIn
 );
-// 開課資訊
-// 前台首頁搜尋教師
-router.get(
-  "/teachers/search",
-  /*authenticated,*/
-  teacherController.getSearchedTeachers
-);
-
-// 取得編輯老師資訊頁
-// 編輯老師資訊
-// 取得編輯個人頁
+// 編輯個人頁
 router.put(
   "/users/putEdit/:id",
-  /*authenticated,*/
+  authenticated,
   upload.single("profile"),
   userController.putUser
 );
+// 未完成課程老師的使用者資料
+router.get(
+  "/users/notDoneCourses/:id",
+  authenticated,
+  userController.getNotDoneCourses
+);
+// 已完成未評分課程老師的使用者資料
+router.get(
+  "/users/notRatedCourses/:id",
+  authenticated,
+  userController.getNotRatedCourses
+);
+// 使用者學習時數排名
+router.get("/users/ranking/:id", authenticated, userController.getRanking);
+// 學習時數前十名
+router.get("/users/topUsers", authenticated, userController.getTopUsers);
+
+// 前台首頁搜尋教師
+router.get(
+  "/teachers/search",
+  authenticated,
+  teacherController.getSearchedTeachers
+);
+
 // 個人資料頁
 router.get("/users/:id", authenticated, userController.getUser);
-// 編輯老師個人資料
 
-// 預約課程
 // 成為老師
-router.post("/beTeacher/:id", /*authenticated, */teacherController.postBeTeacher);
-// 新增一筆老師資料
-// 留下評論
+router.post("/beTeacher/:id", authenticated, teacherController.postBeTeacher);
+//教師評分
+router.get("/teachers/score/:id", authenticated, teacherController.getScore);
+// 教師未完成課程
+router.get(
+  "/teachers/notDoneCourses/:id",
+  authenticated,
+  teacherController.getNotDoneCourses
+);
+// 教師課程風格
+router.get("/teachers/style/:id", authenticated, teacherController.getTeacher);
 
 // 前台教師清單
-router.get("/teachers", /*authenticated,*/ teacherController.getTeachers);
+router.get("/teachers", authenticated, teacherController.getTeachers);
+
 // error
 router.use("/", apiErrorHandler);
 

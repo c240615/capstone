@@ -16,14 +16,14 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
       passReqToCallback: true,
-    },    
+    },
     (req, email, password, cb) => {
       User.findOne({ where: { email } }).then((user) => {
         if (!user)
           return cb(
             null,
             false,
-            req.flash("error_messages", "帳號或密碼輸入錯誤！")            
+            req.flash("error_messages", "帳號或密碼輸入錯誤！")
           );
         bcrypt.compare(password, user.password).then((res) => {
           if (!res)
@@ -32,7 +32,9 @@ passport.use(
               false,
               req.flash("error_messages", "帳號或密碼輸入錯誤！")
             );
-          
+
+          const a = user.toJSON();
+          console.log(a);
           return cb(null, user);
         });
       });
@@ -124,6 +126,7 @@ passport.use(
 passport.serializeUser((user, cb) => {
   cb(null, user.id);
 });
+// 此時產生 req.user
 passport.deserializeUser((id, cb) => {
   User.findByPk(id).then((user) => {
     //console.log(user);

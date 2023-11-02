@@ -1,10 +1,5 @@
-const { Op } = require("sequelize");
 // service
 const userService = require("../../services/user-services.js");
-// model
-const { User, Teacher, Course } = require("../../models");
-// helper
-const { localFileHandler } = require("../../helpers/file-helpers.js");
 
 const userController = {
   // 註冊頁
@@ -41,17 +36,37 @@ const userController = {
     });
   },
   // 使用者資訊頁
-  getUserPage: async (req, res, next) => {
-    userService.getUser(req, (err, data) => {
-      err
-        ? next(err)
-        : res.render("user/profile", {
-            user: data.user,
-            notDoneCourses: data.notDoneCourses,
-            notRatedCourses: data.notRatedCourses,
-            number: data.number,
-          });
-    });
+  getUserPage: (req, res, next) => {
+    Promise.all([
+      userService.getNotDoneCourses(req, (err, data) => {
+        if (err) {
+          next(err);
+        }
+        return data.notDoneCourses;
+      }),
+      userService.getNotRatedCourses(req, (err, data) => {
+        if (err) {
+          next(err);
+        }
+        return data.notRatedCourses;
+      }),
+      userService.getRanking(req, (err, data) => {
+        if (err) {
+          next(err);
+        }
+        return data.ranking;
+      }),
+    ])
+      .then(([notDoneCourses, notRatedCourses, ranking]) => {
+        res.render("user/profile", {
+          notDoneCourses,
+          notRatedCourses,
+          ranking,
+        });
+      })
+      .catch((e) => {
+        next(e);
+      });
   },
   // 編輯頁
   getEditPage: (req, res, next) => {
