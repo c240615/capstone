@@ -3,6 +3,7 @@ const { Teacher, User } = require("../../models");
 // service
 const teacherService = require("../../services/teacher-services.js");
 const userService = require("../../services/user-services.js");
+const courseService = require("../../services/course-services.js");
 
 const teacherController = {
   // 取得所有教師
@@ -47,7 +48,7 @@ const teacherController = {
       }
       return data.averageScore;
     });
-    const notDoneCourses = await teacherService.getNotDoneCourses(
+    const notDoneCourses = await courseService.getNotDoneCourses(
       req,
       (err, data) => {
         if (err) {

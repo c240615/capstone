@@ -145,27 +145,7 @@ const teacherService = {
       cb(e);
     }
   },
-  // 老師未完成的課程
-  getNotDoneCourses: async (req, cb) => {
-    try {
-      const userId = req.params.id;
-
-      const notDoneCoursesData = await Course.findAll({
-        raw: true,
-        nest: true,
-        where: { teacherId: userId, isDone: false },
-        include: [Teacher, User],
-      });
-      const notDoneCourses = notDoneCoursesData.map((item) => {
-        delete item.User.password;
-        return item;
-      });
-      if (!notDoneCourses.length) throw new Error("Id is not valiable!");
-      return cb(null, { notDoneCourses });
-    } catch (e) {
-      cb(e);
-    }
-  },
+  
   // 老師的資料(課程風格)
   getTeacher: async (req, cb) => {
     try {
@@ -174,6 +154,7 @@ const teacherService = {
         raw: true,
         nest: true,
         where: { id: userId },
+        include: [User],
       });
       return cb(null, { teacher });
     } catch (e) {

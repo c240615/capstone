@@ -35,7 +35,7 @@ const userService = {
   getUser: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      if (!id) throw new Error("Id did not exist!");
+      
       const user = await User.findOne({
         raw: true,
         nest: true,
@@ -54,7 +54,7 @@ const userService = {
   getNotDoneCourses: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      if (!id) throw new Error("Id did not exist!");
+      
       const notDoneCoursesData = await Course.findAll({
         raw: true,
         nest: true,
@@ -74,7 +74,7 @@ const userService = {
   getNotRatedCourses: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      if (!id) throw new Error("Id did not exist!");
+      
       const notRatedCoursesData = await Course.findAll({
         raw: true,
         nest: true,
@@ -96,7 +96,7 @@ const userService = {
   getRanking: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      if (!id) throw new Error("Id did not exist!");
+      
       const user = await User.findOne({
         raw: true,
         nest: true,

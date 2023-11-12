@@ -1,10 +1,7 @@
 // service
 const teacherService = require("../../services/teacher-services.js");
 const userController = require("./user-controller.js");
-const {
-  getOffset,
-  getPagination,
-} = require("../../helpers/pagination-helper.js");
+
 const teacherController = {
   // 取得所有教師
   getTeachers: (req, res, next) => {
@@ -35,7 +32,6 @@ const teacherController = {
           });
     });
   },
-
   postBeTeacher: (req, res, next) => {
     teacherService.postBeTeacher(req, (err, data) => {
       err
@@ -57,17 +53,7 @@ const teacherController = {
           });
     });
   },
-  // 教師未完成課程
-  getNotDoneCourses: (req, res, next) => {
-    teacherService.getNotDoneCourses(req, (err, data) => {
-      err
-        ? next(err)
-        : res.json({
-            status: "success",
-            data,
-          });
-    });
-  },
+  
   // 教師課程風格
   getTeacher: (req, res, next) => {
     teacherService.getTeacher(req, (err, data) => {

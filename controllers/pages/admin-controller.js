@@ -10,8 +10,8 @@ const adminController = {
           });
     });
   },
-  getSearchedUsers: async (req, res, next) => {
-    adminService.getSearchedUsers(req, (err, data) => {      
+  getSearchedUsers: (req, res, next) => {
+    adminService.getSearchedUsers(req, (err, data) => {
       err
         ? next(err)
         : res.render("admin/filterUsers", {
@@ -20,9 +20,6 @@ const adminController = {
             pagination: data.pagination,
           });
     });
-    
-    
-    
   },
 };
 module.exports = adminController;

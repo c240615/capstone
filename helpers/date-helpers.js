@@ -5,10 +5,11 @@ const getWeekdays = (startDate, availableWeekday) => {
   let milli = startDate;
   for (let i = todayDay; i < todayDay + 7; i++) {
     if (availableWeekday[i % 7]) {
-      result.push(milli);
+      result.push({ day: i, date: milli });
+      milli += 24 * 60 * 60 * 1000;
+    } else {
       milli += 24 * 60 * 60 * 1000;
     }
-    milli += 24 * 60 * 60 * 1000;
   }
   return result;
 };
@@ -22,8 +23,9 @@ const getHours = (startHour, endHour, courseDuration) => {
   }
   return result;
 };
-// 取得未來 delayDay 的所有課程時間
-const futureDate = (startDate, courseDuration, hourList, delayDay) => {
+
+// 取得未來 delayDay 的單日所有課程時間
+const futureDate = (startDate, hourList, delayDay) => {
   const millisecond = delayDay * 24 * 60 * 60 * 1000;
   // 預約今天以後的課程
   if (delayDay !== 0) {
@@ -37,16 +39,14 @@ const futureDate = (startDate, courseDuration, hourList, delayDay) => {
   }
   // 今天能預約的時間
   const todayHours = hourList.map((hour) => {
-    if (hour > new Date().getHours()) {
-      return hour;
-    }
-    // 不能預約的時間給25
-    return 25;
+    return hour > new Date().getHours() ? hour : 25;
   });
+  
   // 排除不能預約的時間
   const filterHours = todayHours.filter((item) => {
     return item !== 25;
   });
+ 
   // 整理格式
   const result = filterHours.map((hour) => {
     if (Number.isInteger(hour)) {
@@ -54,22 +54,30 @@ const futureDate = (startDate, courseDuration, hourList, delayDay) => {
     }
     return new Date(startDate + millisecond).setHours(hour, 30, 0);
   });
+
   // 返回毫秒數
   return result;
 };
 
 // 刪除陣列重複值
 const removeDuplicates = (arr) => {
+  arr.forEach((i) => {
+    (i / 1000).toFixed(0);
+  });
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] === arr[i + 1]) {
       arr.splice(i, 2);
       i--;
     }
   }
+  arr.forEach((i) => {
+    i * 1000;
+  });
+  return arr;
 };
 
 module.exports = {
-  
+  getWeekdays,
   getHours,
   futureDate,
   removeDuplicates,

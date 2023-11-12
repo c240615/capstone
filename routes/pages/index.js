@@ -69,7 +69,7 @@ router.post("/reserve/:id", authenticated, courseController.postCourse);
 router.get("/beTeacher", authenticated, teacherController.beTeacherPage);
 router.post("/beTeacher/:id", authenticated, teacherController.postBeTeacher);
 // 評論
-router.post("/comment", authenticated, courseController.postScore);
+router.post("/comment/:id", authenticated, courseController.postScore);
 // 進入前台首頁
 router.get("/teachers", authenticated, teacherController.getTeachers);
 // 使用者輸入其餘路由時自動導向
