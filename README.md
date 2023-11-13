@@ -34,6 +34,3 @@
    ```bash
    Running on http://localhost:3000
    ```
-https://fast-cove-66654-7ae81c0d02e1.herokuapp.com/auth/google/callback
-
-http://localhost:3000/auth/google/callback

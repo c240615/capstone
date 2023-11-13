@@ -1,6 +1,6 @@
 // service
 const userService = require("../../services/user-services.js");
-
+const teacherService = require('../../services/teacher-services.js')
 const userController = {
   // 註冊頁
   signUpPage: (req, res) => {
@@ -38,6 +38,12 @@ const userController = {
   // 使用者資訊頁
   getUserPage: (req, res, next) => {
     Promise.all([
+      teacherService.getScore(req, (err, data) => {
+        if (err) {
+          next(err);
+        }
+        return data.averageScore;
+      }),
       userService.getNotDoneCourses(req, (err, data) => {
         if (err) {
           next(err);
@@ -57,8 +63,9 @@ const userController = {
         return data.ranking;
       }),
     ])
-      .then(([notDoneCourses, notRatedCourses, ranking]) => {
+      .then(([averageScore, notDoneCourses, notRatedCourses, ranking]) => {
         res.render("user/profile", {
+          averageScore,
           notDoneCourses,
           notRatedCourses,
           ranking,

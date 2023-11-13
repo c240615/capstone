@@ -3,11 +3,31 @@
     <!--基本資料-->
     <div class="col-4 d-flex card bg-light border-0">
       <img class="card-img-top my-3" src="{{user.profile}}" alt="user.img" />
-      <h1 class="my-2"> {{user.name}}</h1>
-      <h3 class="my-2"> {{user.nation}}</h3>
-      <h3>course.score</h3>
-      <h3>About Me</h3>
-      <h4>{{user.intro}}</h4>
+      <h1 class="my-2">
+        <i
+          class="fa-solid fa-user"
+          style="color: #000000;"
+        >&#09;{{user.name}}</i>
+      </h1>
+      <h3 class="my-2">
+        <i
+          class="fa-solid fa-earth-asia"
+          style="color: #000000;"
+        >&#09;{{user.nation}}</i>
+      </h3>
+      <h3>
+        <i
+          class="fa-regular fa-star"
+          style="color: #000000;"
+        >&#09;{{averageScore}}</i>
+
+      </h3>
+      <h4>
+        <i
+          class="fa-solid fa-file"
+          style="color: #000000;"
+        >&#09;{{user.intro}}</i>
+      </h4>
 
       <button class="btn btn-secondary my-2" type="button" id="button-addon2"><a
           class="text-decoration-none text-white"
@@ -20,13 +40,19 @@
     <!--課程資料-->
     <div class="col-8">
       <!--未完成未評分課程-->
-      <h3 class="my-4">New Schedule</h3>
+      <h3 class="my-4">
+        <i class="fa-regular fa-square-check" style="color: #000000;">&#09;</i>
+        New Schedule
+      </h3>
       <div class="row my-2">
         {{#each notDoneCourses}}
-          <div class="col-6">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h6 class="card-title">{{this.date}}</h6>
+          <div class="col-6 ">
+            <div class="card my-2" style="width: 22rem;">
+              <div class="card-body" >
+                <h6 class="card-title courseDate" >
+                  <i class="fa-regular fa-calendar-days" style="color: #c0c0c0;"></i>
+                  {{this.date}}
+                  </h6>
                 <h6 class="card-subtitle mb-2">Teacher :
                   {{this.Teacher.User.name}}</h6>
                 <h6>session link:</h6>
@@ -38,11 +64,14 @@
       </div>
 
       <!--已完成未評分課程-->
-      <h3 class="my-4">Lesson History</h3>
-      <div class="row">
+      <h3 class="my-4">
+        <i class="fa-solid fa-square-check" style="color: #000000;">&#09;</i>
+        Lesson History
+      </h3>
+      <div class="row ">
         {{#each notRatedCourses}}
           <form class="row g-3 col-6 m-0 p-0">
-            <div class="col-auto">
+            <div class="col-auto ">
               <img
                 readonly
                 class="form-control-plaintext p-0 m-0"
@@ -54,7 +83,7 @@
               <input
                 type="text"
                 id="courseId"
-                name="userId"
+                name="courseId"
                 class="form-control"
                 value="{{this.id}}"
                 disabled
@@ -65,7 +94,7 @@
                 type="text"
                 name="userId"
                 class="form-control"
-                value="{{this.Teacher.User.name}}"
+                value="教師 : {{this.Teacher.User.name}}"
                 disabled
               />
             </div>
@@ -73,7 +102,7 @@
               <button
                 type="button"
                 id="toModalButton"
-                class="btn btn-danger mb-3"
+                class="btn btn-danger mb-3 select"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
               >
@@ -83,9 +112,11 @@
           </form>
         {{/each}}
       </div>
-
       <!--我的學習次數名次-->
-      <h3 class="my-4">我的學習次數名次</h3>
+      <h3 class="my-4">
+        <i class="fa-solid fa-ranking-star" style="color: #000000;"></i>
+        我的學習次數名次
+      </h3>
       <div class="card">
         <h5 class="card-body m-0">{{ranking}}</h5>
       </div>
@@ -116,18 +147,17 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-8 m-2">
-
               <input
                 id="courseID"
                 type="number"
                 min="1"
                 max="100"
-                name="courseId"
+                name="courseID"
+                disabled
                 required
               />
             </div>
             <div class="col-8 m-2">
-
               <input
                 type="number"
                 min="1"
@@ -139,7 +169,6 @@
               />
             </div>
             <div class="col-8 m-2">
-
               <input
                 type="text"
                 name="comment"
@@ -149,7 +178,6 @@
               />
             </div>
           </div>
-
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-danger text-white">
@@ -160,9 +188,19 @@
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >Close</button>
-
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<script>
+  /*預約課程按鈕*/ const btn = document.querySelector(".select"); /*已選擇的課程
+  id*/ const courseId = document.getElementById("courseId");
+  /*待送出的表格欄位*/ const courseID = document.getElementById("courseID");
+  /*綁定按鈕點擊事件 (預約課程)*/ 
+  btn.addEventListener("click", ()=>{
+   courseID.value = courseId.value; });
+
+  
+</script>

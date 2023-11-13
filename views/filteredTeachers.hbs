@@ -1,4 +1,4 @@
-<h1 class="px-4">教師清單</h1>
+<h1 class="px-4 pb-3"><i class="fa-solid fa-chalkboard-user"> <b class="px-2">教師清單</b></i> </h1>
 <div class="container-fluid">
   <div class="row">
     <!--教師清單-->
@@ -29,27 +29,27 @@
             </form>
           </div>
 
-          {{#each filterDatas}}
-            <div class="col-4" style="height: 550px">
-              <div class="p-3 border bg-light h-100 d-inline-block">
-                <img
-                  class="card-img-top"
-                  src="{{this.User.profile}}"
-                  alt="{{this.User.name}}"
-                />
-                <div class="card-body m-0" style="height: 500px">
-                  <h3 class="card-title h-15">{{this.User.name}}</h3>
-                  <h6 class="h-15">{{this.User.nation}}</h6>
-                  <p class="card-text h-30">{{this.User.intro}}</p>
-                  <div class="h-30">
-                    <a
-                    href="/teachers/reserve/{{this.id}}"
-                    class="btn btn-outline-danger"
-                  >開課資訊</a>
-                  </div>                  
-                </div>
+          {{#each filterDatas}} 
+          <div class="col-6 my-5">
+            <div class="row">
+              <div class="col-4" >
+                <a href="/teachers/reserve/{{this.id}}">
+                    <img class="border bg-light" style="height: 150px;" src="{{this.User.profile}}" alt="{{this.User.name}}"/>
+                  </a>              
+              </div>
+              <div class="col col-8">
+                <h6 class="row h-15 ps-5 my-1">
+                  <i class="fa-solid fa-user d-inline" style="color: #000000;">&#09;{{this.User.name}}</i>
+                </h6>
+                <h6 class="row h-15 ps-5 my-3">
+                  <i class="fa-solid fa-earth-asia" style="color: #000000;">&#09;{{this.User.nation}}</i>                
+                </h6>
+                <p class="row h-30 ps-5 my-1">
+                  <i class="fa-solid fa-file" style="color: #000000;">&#09;{{this.intro}}</i>                
+                </p>              
               </div>
             </div>
+          </div>         
           {{/each}}
 
         </div>
@@ -59,7 +59,11 @@
     <!--排行榜-->
     <div class="col-4 p-3">
       <ul class="list-group">
-        <h3>學習時數總排行</h3>
+        <h3 class="px-2">
+          <i class="fa-solid fa-ranking-star ">
+            <b class="px-3">學習時數總排行</b>
+          </i>
+        </h3>
         {{#each topTen}}
           <li class="list-group-item">
             <div class="row justify-content-start align-items-center">

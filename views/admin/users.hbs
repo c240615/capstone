@@ -1,14 +1,17 @@
-<h1>使用者清單</h1>
+<h1 class="m-2 mb-4">
+  <i class="fa-solid fa-user" style="color: #000000;"><b class="px-2">使用者清單</b></i>
+</h1>
+
 <!--搜尋框-->
 <div class="input-group mb-3">
   <form action="/admin/users/search" method="get">
     <div class="input-group mb-3">
       <input type="text" name="keyword" class="form-control" placeholder="請輸入使用者名稱"
               aria-label="keyword" aria-describedby="search-button" value="{{keyword}}">
-      <div class="input-group-append">
+      <div class="input-group-append mx-3">
           <button class="btn btn-outline-danger search" type="submit" id="search-button">搜尋</button>
-        </div>
       </div>
+    </div>
   </form>  
 </div>
 

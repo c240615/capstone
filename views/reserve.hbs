@@ -55,45 +55,53 @@
     </div>
 
     <!--預約上課-->
-    {{#if user.isTeacher}}
-    {{else}}
-    <div class="col-4 p-3">
-      <form
-        action="/reserve/{{teacher.id}}"
-        method="POST"
-        class="d-flex flex-column was-validated"
-      >
-        <div class="m-2">
-          <select
-            class="form-select"
-            aria-label="Default select example"
-            name="date"
-            required
-          >
-            <option class="is-invalid">請選擇課程</option>
-            {{#each final}}
-              <option name="date" value="{{this.date}}" type="text">
-                {{this.date}}
-              </option>
-            {{/each}}
-          </select>
-        </div>
+    {{#if user.isTeacher}}{{else}}
+      <div class="col-4 p-3">
+        <form
+          action="/reserve/{{teacher.id}}"
+          method="POST"
+          class="d-flex flex-column was-validated"
+        >
+          <div class="m-2">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              name="date"
+              required
+            >
+              <option
+                class="is-invalid"
+                value="請重新選擇預約時間"
+              >請選擇課程</option>
+              {{#each final}}
+                <option
+                  name="date"
+                  value="{{this.date}}"
+                  type="text"
+                  id="selectDate"
+                >
+                  {{this.date}}
+                </option>
+              {{/each}}
+            </select>
+          </div>
 
-        <div class="m-0">
-          <button
-            id="chooseLesson"
-            type="button"
-            class="btn btn-danger mx-2"
-            data-bs-toggle="modal"
-            data-bs-target="#chooseLessonModal"
-          >預約課程</button>
-        </div>
-      </form>
-    </div>
+          <div class="m-0">
+            <button
+              id="reserve"
+              type="button"
+              class="btn btn-danger mx-2 select"
+              data-bs-toggle="modal"
+              data-bs-target="#chooseLessonModal"
+            >預約課程</button>
+          </div>
+        </form>
+      </div>
     {{/if}}
   </div>
 </div>
 
+<!--modal-->
 <div
   class="modal fade"
   id="chooseLessonModal"
@@ -115,7 +123,6 @@
               class="form-control"
               type="text"
               name="date"
-              value="預約失敗，請重新選擇"
               aria-label="預約時間"
               readonly
             />
@@ -140,7 +147,6 @@
               type="text"
               value="{{teacher.link}}"
               aria-label="上課網址"
-              disabled
               readonly
             />
           </div>
@@ -160,10 +166,11 @@
 </div>
 
 <script>
-  const select = document.querySelector(".form-select"); 
-  const courseDate = document.getElementById("courseDate"); 
-  select.addEventListener("change",
-  function () { let index = select.selectedIndex; courseDate.value =
-  select.options[index].value; }
-   )
+  /*select input*/ const select = document.querySelector(".form-select");
+  /*預約課程按鈕*/ const btn = document.querySelector(".select"); /* modal
+  課程時間 */ const courseDate = document.getElementById("courseDate");
+  /*綁定按鈕點擊事件 (預約課程)*/ btn.addEventListener("click", ()=>{ const
+  index = select.selectedIndex; courseDate.value = select.options[index].value }
+  )
+
 </script>

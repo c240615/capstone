@@ -54,9 +54,10 @@ const teacherController = {
         if (err) {
           next(err);
         }
+        
         return data.notDoneCourses;
       }
-    );
+    );  
     const style = await teacherService.getTeacher(req, (err, data) => {
       if (err) {
         next(err);

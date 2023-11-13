@@ -9,7 +9,7 @@ const teacherService = {
   // 取得所有教師
   getTeachers: async (req, cb) => {
     try {
-      const DEFAULT_LIMIT = 9;
+      const DEFAULT_LIMIT = 6;
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || DEFAULT_LIMIT;
       const offset = getOffset(limit, page);
@@ -138,14 +138,15 @@ const teacherService = {
       scoreArray.forEach((item) => {
         total += item;
       });
-      const averageScore = Math.ceil((total / scoreArray.length) * 10) / 10;
-      if (!averageScore) throw new Error("Id is not valiable!");
+      const averageScore =
+        Math.ceil((total / scoreArray.length) * 10) / 10 ||
+        "使用者尚未被評分";
       return cb(null, { averageScore });
     } catch (e) {
       cb(e);
     }
   },
-  
+
   // 老師的資料(課程風格)
   getTeacher: async (req, cb) => {
     try {

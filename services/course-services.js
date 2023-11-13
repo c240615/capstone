@@ -21,7 +21,7 @@ const courseService = {
       const notDoneCourses = notDoneCoursesData.map((item) => {
         delete item.User.password;
         return item;
-      });
+      });      
       if (!notDoneCourses.length) throw new Error("No course is not done!");
       return cb(null, { notDoneCourses });
     } catch (e) {
@@ -42,7 +42,7 @@ const courseService = {
       const scoredCourses = courses.filter((item) => {
         return item.Courses.score !== null;
       });
-      if (!courses) {
+      if (!scoredCourses) {
         throw new Error("This teacher did not have a scored course.");
       }
       let courseScore = scoredCourses.map((item) => {
@@ -195,9 +195,10 @@ const courseService = {
   },
   postScore: async (req, cb) => {
     const userId = Number(req.params.id);
-    const { courseId, score, comment } = req.body;
+    const { courseID, score, comment } = req.body;
+    
     Course.findAll({
-      where: { id: Number(courseId), userId: userId },
+      where: { id: Number(courseID), userId: userId },
     })
       .then((course) => {
         if (!score || !comment) {

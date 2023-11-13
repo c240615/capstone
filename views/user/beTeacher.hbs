@@ -1,7 +1,12 @@
-<form method="POST" action="/beTeacher/{{user.id}}">
+<form class="mx-5" method="POST" action="/beTeacher/{{user.id}}">
   <!--intro-->
   <div class="mb-3">
-    <label for="intro" class="form-label">你的課程介紹</label>
+    <label for="intro" class="form-label">
+      <h3>
+        <i class="fa-solid fa-chalkboard" style="color: #0b0b0b;">&nbsp;你的課程介紹</i>
+      </h3>
+      
+    </label>
     <textarea
       id="intro"
       name="intro"
@@ -12,18 +17,30 @@
   </div>
   <!--style-->
   <div class="mb-3">
-    <label for="style" class="form-label">你的教學風格</label>
+    <label for="style" class="form-label">
+      <h3>
+        <i
+          class="fa-solid fa-person-chalkboard"
+          style="color: #0b0b0b;"
+        >&nbsp;你的教學風格</i>
+      </h3>
+    </label>
     <textarea
       id="style"
       name="style"
       rows="5"
       cols="20"
       class="form-control"
-    >Your Teaching Style</textarea>
+    >Your Teaching Style
+    </textarea>
   </div>
   <!--course duration-->
   <div class="mb-3">
-    <label for="courseDuration" class="form-label">單堂課程時間(分鐘)</label>
+    <label for="courseDuration" class="form-label">
+      <h3>
+        <i class="fa-solid fa-clock" style="color: #0b0b0b;">&nbsp;單堂課程時間(分鐘)</i>  
+      </h3>          
+    </label>
     <select
       class="form-select"
       aria-label="duration"
@@ -36,7 +53,12 @@
   </div>
   <!--link-->
   <div class="mb-3">
-    <label for="link" class="form-label">你的課程連結</label>
+    <label for="link" class="form-label">
+      <h3>
+        <i class="fa-solid fa-link" style="color: #0b0b0b;">&nbsp;你的課程連結</i>
+      </h3>
+      
+    </label>
     <input
       type="text"
       class="form-control"
@@ -47,8 +69,11 @@
   </div>
   <!--appointment-->
   <div class="mb-3">
-    <label for="link" class="form-label">開放預約時間</label>
-
+    <label for="link" class="form-label">
+      <h3>
+        <i class="fa-solid fa-calendar-week" style="color: #0b0b0b;">&nbsp;開放預約時間</i>
+      </h3>     
+    </label>
     <!-- Sunday teacherDatas-->
     <div class="input-group">
       <div class="input-group-text bg-danger">
