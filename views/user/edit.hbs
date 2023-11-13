@@ -1,6 +1,14 @@
-<form method="POST" action="/users/putEdit/{{user.id}}?_method=PUT" enctype="multipart/form-data">
+<form
+  method="POST"
+  action="/users/putEdit/{{user.id}}?_method=PUT"
+  enctype="multipart/form-data"
+  class="mx-5"
+>
   <div class="mb-3">
-    <label for="name" class="form-label">Name</label>
+    <label for="name" class="form-label">
+      <h3><i class="fa-solid fa-signature" style="color: #808080;"></i>
+        Name</h3>
+    </label>
     <input
       type="text"
       name="name"
@@ -11,7 +19,11 @@
     />
   </div>
   <div class="mb-3">
-    <label for="nation" class="form-label">Nation</label>
+    <label for="nation" class="form-label">
+      <h3><i class="fa-solid fa-earth-asia" style="color: #808080;"></i>
+        Nation</h3>
+
+    </label>
     <input
       type="text"
       name="nation"
@@ -22,7 +34,11 @@
     />
   </div>
   <div class="mb-3">
-    <label for="intro" class="form-label">Introduction</label>
+    <label for="intro" class="form-label">
+      <h3>
+        <i class="fa-solid fa-file" style="color: #808080;"></i>
+        Introduction</h3>
+    </label>
     <input
       type="text"
       name="intro"
@@ -31,18 +47,22 @@
       value="{{user.intro}}"
     />
   </div>
-    <div class="mb-3">
-    <label for="profile" class="form-label">Profile</label>
+  <div class="mb-3">
+    <label for="profile" class="form-label">
+      <h3><i class="fa-regular fa-address-card" style="color: #808080;"></i>
+      Profile</h3>
+      
+      </label>
     <input
       type="file"
       name="profile"
       class="form-control"
       id="profile"
-      value="{{user.profile}}"      
+      value="{{user.profile}}"
     />
     {{user.profile}}
   </div>
 
   <button type="submit" class="btn btn-secondary">Submit</button>
 </form>
-<a class="btn btn-secondary my-2" href="/users/{{user.id}}">Back</a>
+<a class="btn btn-secondary my-2 mx-5" href="/users/{{user.id}}">Back</a>

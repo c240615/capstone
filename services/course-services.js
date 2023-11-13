@@ -46,7 +46,7 @@ const courseService = {
         throw new Error("This teacher did not have a scored course.");
       }
       let courseScore = scoredCourses.map((item) => {
-        return { score: item.Courses.score, intro: item.intro };
+        return { id:item.Courses.id,score: item.Courses.score, intro: item.intro };
       });
       // 老師評分
       const scores = scoredCourses.map((item) => {

@@ -16,10 +16,23 @@
           <div class="card bg-light" style="width: 18rem;border:0cap;">
             <div class="card-body">
               <h5 class="card-title">
-                <h1>{{teacher.User.name}}</h1>
+                <h1><i
+                    class="fa-solid fa-user"
+                    style="color: #000000;"
+                  >&#09;{{teacher.User.name}}</i></h1>
               </h5>
-              <p class="card-text">{{teacher.User.nation}}</p>
-              <p>評分 : {{averageScore}}</p>
+              <h1 class="card-text">
+                <i
+                  class="fa-solid fa-earth-asia"
+                  style="color: #000000;"
+                >&#09;{{teacher.User.nation}}</i>
+              </h1>
+              <h3>
+                <i
+                  class="fa-regular fa-star"
+                  style="color: #000000;"
+                >&#09;{{averageScore}}</i>
+              </h3>
             </div>
           </div>
         </div>
@@ -31,22 +44,35 @@
               aria-current="true"
             >
               <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Introduction</h5>
+                <h5 class="mb-1">
+                  <i
+                    class="fa-solid fa-file"
+                    style="color: #000000;"
+                  >&#09;Introduction</i>
+                </h5>
               </div>
               <p class="mb-1">{{teacher.intro}}</p>
             </a>
             <a href="#" class="list-group-item list-group-item-action">
               <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Teaching Style</h5>
+                <h5 class="mb-1">
+                  <i
+                    class="fa-solid fa-pen-nib"
+                    style="color: #000000;"
+                  >&#09;Your Teaching Style</i>
+                </h5>
               </div>
               <p class="mb-1">{{teacher.style}}</p>
             </a>
             <a href="#" class="list-group-item list-group-item-action">
               <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Lesson History</h5>
+                <h5 class="mb-1">
+                  <i class="fa-solid fa-square-check" style="color: #000000;">&#09;Lesson History</i>
+                  
+                </h5>
               </div>
-              {{#each courseScore}}
-                <p class="mb-1">{{this.score}} - {{this.intro}}</p>
+              {{#each courseScore}}              
+                <p class="mb-1 py-1">課程編號 : {{this.id}} - 評分 : {{this.score}} ， 課程介紹 : {{this.intro}}</p>
               {{/each}}
             </a>
           </div>

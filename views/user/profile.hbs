@@ -20,7 +20,6 @@
           class="fa-regular fa-star"
           style="color: #000000;"
         >&#09;{{averageScore}}</i>
-
       </h3>
       <h4>
         <i
@@ -28,7 +27,6 @@
           style="color: #000000;"
         >&#09;{{user.intro}}</i>
       </h4>
-
       <button class="btn btn-secondary my-2" type="button" id="button-addon2"><a
           class="text-decoration-none text-white"
           href="/users/edit/{{user.id}}"
@@ -40,23 +38,25 @@
     <!--課程資料-->
     <div class="col-8">
       <!--未完成未評分課程-->
-      <h3 class="my-4">
+      <h3 class="my-2">
         <i class="fa-regular fa-square-check" style="color: #000000;">&#09;</i>
         New Schedule
       </h3>
       <div class="row my-2">
         {{#each notDoneCourses}}
-          <div class="col-6 ">
+          <div class="col-6">
             <div class="card my-2" style="width: 22rem;">
               <div class="card-body" >
                 <h6 class="card-title courseDate" >
                   <i class="fa-regular fa-calendar-days" style="color: #c0c0c0;"></i>
                   {{this.date}}
                   </h6>
-                <h6 class="card-subtitle mb-2">Teacher :
-                  {{this.Teacher.User.name}}</h6>
-                <h6>session link:</h6>
-                <a href="/comment" class="card-link">{{this.Teacher.link}}</a>
+                <h6 class="card-subtitle mb-2">
+                  <i class="fa-solid fa-chalkboard-user" style="color: #c0c0c0;"></i>
+                  {{this.Teacher.User.name}}
+                  </h6>
+                <h6><i class="fa-solid fa-link" style="color: #c0c0c0;"></i>&#09;<a href="/comment" class="card-link">{{this.Teacher.link}}</a></h6>
+                
               </div>
             </div>
           </div>
@@ -200,7 +200,5 @@
   /*待送出的表格欄位*/ const courseID = document.getElementById("courseID");
   /*綁定按鈕點擊事件 (預約課程)*/ 
   btn.addEventListener("click", ()=>{
-   courseID.value = courseId.value; });
-
-  
+   courseID.value = courseId.value; });  
 </script>

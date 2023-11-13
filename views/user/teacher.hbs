@@ -3,13 +3,30 @@
     <!--基本資料-->
     <div class="col-4 d-flex card bg-light border-0">
       <img class="card-img-top my-3" src="{{user.profile}}" alt="user.img" />
-      <h1 class="my-2">{{user.name}}</h1>
-      <h3 class="my-2">{{user.nation}}</h3>
-
-      <h3 class="my-2">{{averageScore}}</h3>
-
-      <h3>About Me</h3>
-      <h4>{{user.intro}}</h4>
+      <h1 class="my-2">
+        <i
+          class="fa-solid fa-user"
+          style="color: #000000;"
+        >&#09;{{user.name}}</i>
+      </h1>
+      <h3 class="my-2">
+        <i
+          class="fa-solid fa-earth-asia"
+          style="color: #000000;"
+        >&#09;{{user.nation}}</i>
+      </h3>
+      <h3>
+        <i
+          class="fa-regular fa-star"
+          style="color: #000000;"
+        >&#09;{{averageScore}}</i>
+      </h3>
+      <h4>
+        <i
+          class="fa-solid fa-file"
+          style="color: #000000;"
+        >&#09;{{user.intro}}</i>
+      </h4>
       <button class="btn btn-secondary my-2" type="button"><a
           class="text-decoration-none text-white"
           href="/teachers/edit/{{user.id}}"
@@ -21,15 +38,24 @@
     <!--課程資料-->
     <div class="col-8">
       <!--新課程-->
-      <h3 class="my-4">New Schedule</h3>
-      <div class="row">
+      <h3 class="my-2">
+        <i class="fa-regular fa-square-check" style="color: #000000;">&#09;</i>
+        New Schedule
+      </h3>
+      <div class="row my-2">
         {{#each notDoneCourses}}
           <div class="col-6">
-            <div class="card" style="width: 18rem;">
+            <div class="card my-2" style="width: 22rem;">
               <div class="card-body">
-                <h5 class="card-title">Time:{{this.date}}</h5>
-                <h5 class="card-subtitle mb-2">Student:{{this.User.name}}</h5>
-                <h5>session link:</h5>
+                <h6 class="card-title courseDate" >
+                  <i class="fa-regular fa-calendar-days" style="color: #c0c0c0;"></i>
+                  {{this.date}}
+                  </h6>
+                  <h6 class="card-subtitle mb-2">
+                  <i class="fa-solid fa-chalkboard-user" style="color: #c0c0c0;"></i>
+                  {{this.User.name}}
+                  </h6>                
+                <i class="fa-solid fa-link" style="color: #c0c0c0;"></i>&#09;
                 <a href="/" class="card-link">{{this.Teacher.link}}</a>
               </div>
             </div>
@@ -37,15 +63,22 @@
         {{/each}}
       </div>
       <!--Your Teaching Style-->
-      <h3 class="my-4">Your Teaching Style</h3>
+      <h3 class="my-4">
+        <i class="fa-solid fa-pen-nib" style="color: #000000;"></i>
+        Your Teaching Style
+        </h3>
       <div class="row row-cols-2">
         <div class="col bg-light m-0">
-          <h3 class="m-0 p-0">{{style}}</h3>
+          <h6 class="m-0 p-4 border">
+            {{style}}</h6>
         </div>
       </div>
-      <h3 class="my-4">Recent Reviewed</h3>
+      <h3 class="my-4">
+        <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
+        Recent Reviewed
+      </h3>
       {{#each scoredCourses}}
-        <p class="mb-1">{{this.score}} - {{this.comment}}</p>
+        <p class="mb-1 border p-4">第 {{this.id}} 堂課 - 評分 : {{this.score}} ， 評論 : {{this.comment}}</p>
       {{/each}}
     </div>
   </div>

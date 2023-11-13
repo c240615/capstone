@@ -1,7 +1,11 @@
-<form method="POST" action="/teachers/edit/{{user.id}}?_method=PUT">
+<form method="POST" action="/teachers/edit/{{user.id}}?_method=PUT" class="mx-5">
 
   <div class="mb-3">
-    <label for="name" class="form-label">教師名稱{{#if teacher}}{{this.id}}{{/if}}</label>
+    <label for="name" class="form-label">
+      <h3><i class="fa-solid fa-chalkboard-user" style="color: #000000;">&nbsp;教師名稱</i>
+      </h3>
+      
+      {{#if teacher}}{{this.id}}{{/if}}</label>
     <input
       id="name"
       name="name"      
@@ -12,7 +16,9 @@
   </div>
   <!--intro-->
   <div class="mb-3">
-    <label for="intro" class="form-label">課程介紹</label>
+    <label for="intro" class="form-label"><h3>
+        <i class="fa-solid fa-chalkboard" style="color: #0b0b0b;">&nbsp;課程介紹</i>
+      </h3></label>
     <textarea
       id="intro"
       name="intro"
@@ -23,7 +29,12 @@
   </div>
   <!--style-->
   <div class="mb-3">
-    <label for="style" class="form-label">教學風格</label>
+    <label for="style" class="form-label"><h3>
+        <i
+          class="fa-solid fa-person-chalkboard"
+          style="color: #0b0b0b;"
+        >&nbsp;教學風格</i>
+      </h3></label>
     <textarea
       id="style"
       name="style"
@@ -34,7 +45,9 @@
   </div>
   <!--course duration-->
   <div class="mb-3">
-    <label for="courseDuration" class="form-label">單堂課程時間(分鐘)</label>
+    <label for="courseDuration" class="form-label"><h3>
+        <i class="fa-solid fa-clock" style="color: #0b0b0b;">&nbsp;單堂課程時間(分鐘)</i>  
+      </h3> </label>
     <select
       class="form-select"
       aria-label="duration"
@@ -47,12 +60,16 @@
   </div>
   <!--link-->
   <div class="mb-3">
-    <label for="link" class="form-label">你的課程連結</label>
+    <label for="link" class="form-label"><h3>
+        <i class="fa-solid fa-link" style="color: #0b0b0b;">&nbsp;你的課程連結</i>
+      </h3></label>
     <input type="text" class="form-control" id="link" name="link" value="{{teacher.link}}"/>
   </div>
   <!--appointment-->
   <div class="mb-3">
-    <label for="link" class="form-label">開放預約時間</label>
+    <label for="link" class="form-label"><h3>
+        <i class="fa-solid fa-calendar-week" style="color: #0b0b0b;">&nbsp;開放預約時間</i>
+      </h3> </label>
     <!-- Sunday -->
     <div class="input-group">
       <div class="input-group-text bg-danger">
@@ -63,6 +80,7 @@
           aria-label="Radio button for following text input"
           id="Sunday"
           name="sunday"
+           {{#ifCond teacher.sunday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Sunday" class="form-control text-align">Sunday</label>
@@ -78,6 +96,7 @@
           aria-label="Radio button for following text input"
           id="Monday"
           name="monday"
+           {{#ifCond teacher.monday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Monday" class="form-control text-align">Monday</label>
@@ -93,6 +112,7 @@
           aria-label="Radio button for following text input"
           id="Tuesday"
           name="tuesday"
+           {{#ifCond teacher.tuesday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Tuesday" class="form-control text-align">Tuesday</label>
@@ -108,6 +128,7 @@
           aria-label="Radio button for following text input"
           id="Wednesday"
           name="wednesday"
+           {{#ifCond teacher.wednesday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Wednesday" class="form-control text-align">Wednesday</label>
@@ -123,6 +144,7 @@
           aria-label="Radio button for following text input"
           id="Thursday"
           name="thursday"
+          {{#ifCond teacher.thursday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Thursday" class="form-control text-align">Thursday</label>
@@ -138,6 +160,7 @@
           aria-label="Radio button for following text input"
           id="Friday"
           name="friday"
+          {{#ifCond teacher.friday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Friday" class="form-control text-align">Friday</label>
@@ -153,6 +176,7 @@
           aria-label="Radio button for following text input"
           id="Saturday"
           name="saturday"
+          {{#ifCond teacher.saturday 1}}checked{{/ifCond}}
         />
       </div>
       <label for="Saturday" class="form-control text-align">Saturday</label>
@@ -161,4 +185,4 @@
   </div>
   <button type="submit" class="btn btn-outline-danger">Submit</button>
 </form>
-<a class="btn btn-secondary my-2" href="/teachers/{{teacher.id}}">Back</a>
+<a class="btn btn-secondary my-2 mx-5" href="/teachers/{{teacher.id}}">Back</a>
