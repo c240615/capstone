@@ -35,13 +35,13 @@ const userService = {
   getUser: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      
       const user = await User.findOne({
         raw: true,
         nest: true,
         where: { id },
         include: [Course],
       });
+      if (!user) throw new Error("User didn't exist!");
       delete user.password;
       return cb(null, {
         user,
@@ -54,17 +54,19 @@ const userService = {
   getNotDoneCourses: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      
       const notDoneCoursesData = await Course.findAll({
         raw: true,
         nest: true,
         where: { userId: id, isDone: false },
         include: [{ model: Teacher, include: [{ model: User }] }],
       });
+
       const notDoneCourses = notDoneCoursesData.map((item) => {
         delete item.Teacher.User.password;
         return item;
       });
+      if (!notDoneCourses.length)
+        throw new Error("NotDoneCourses didn't exist!");
       return cb(null, { notDoneCourses });
     } catch (e) {
       cb(e);
@@ -74,7 +76,6 @@ const userService = {
   getNotRatedCourses: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      
       const notRatedCoursesData = await Course.findAll({
         raw: true,
         nest: true,
@@ -83,10 +84,14 @@ const userService = {
         },
         include: [{ model: Teacher, include: [{ model: User }] }],
       });
-      const notRatedCourses = notRatedCoursesData.map((item) => {
-        delete item.Teacher.User.password;
-        return item;
-      });
+      const notRatedCourses =
+        notRatedCoursesData.map((item) => {
+          delete item.Teacher.User.password;
+          return item;
+        }) || "沒有相關課程";
+      if (!notRatedCourses.length)
+        throw new Error("NotRatedCourses didn't exist!");
+      
       return cb(null, { notRatedCourses });
     } catch (e) {
       cb(e);
@@ -96,12 +101,13 @@ const userService = {
   getRanking: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-      
+
       const user = await User.findOne({
         raw: true,
         nest: true,
         where: { id },
       });
+      if (!user) throw new Error("User didn't exist!");
       const topUsers = await User.findAll({
         raw: true,
         nest: true,
@@ -131,7 +137,7 @@ const userService = {
           ["name", "ASC"],
         ],
       });
-      if (!topUsers) throw new Error("No data!");
+      if (!topUsers) throw new Error("No topUsers data!");
       const topTen = topUsers.map((item, index) => {
         return { profile: item.profile, index: index + 1, name: item.name };
       });

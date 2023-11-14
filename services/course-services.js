@@ -8,6 +8,24 @@ const {
   removeDuplicates,
 } = require("../helpers/date-helpers");
 const courseService = {
+  // 已評分的課程
+  getScoredCourses: async (req, cb) => {
+    try {
+      const userId = req.params.id;
+      const scoredCourses = await Course.findAll({
+        raw: true,
+        nest: true,
+        where: {
+          [Op.and]: [{ teacherId: userId }, { score: { [Op.not]: null } }],
+        },
+        include: [Teacher],
+      });
+      if (!scoredCourses.length) throw new Error("ScoredCourses is not exist!");
+      return cb(null, { scoredCourses });
+    } catch (e) {
+      cb(e);
+    }
+  },
   // 老師未完成的課程
   getNotDoneCourses: async (req, cb) => {
     try {
@@ -18,10 +36,12 @@ const courseService = {
         where: { teacherId: userId, isDone: false },
         include: [Teacher, User],
       });
+      if (!notDoneCoursesData.length)
+        throw new Error("Teacher didn't exist or no not done course!");
       const notDoneCourses = notDoneCoursesData.map((item) => {
         delete item.User.password;
         return item;
-      });      
+      });
       if (!notDoneCourses.length) throw new Error("No course is not done!");
       return cb(null, { notDoneCourses });
     } catch (e) {
@@ -38,15 +58,19 @@ const courseService = {
         where: { id: req.params.id },
         include: [Course],
       });
+      if (!courses.length) {
+        throw new Error("Teacher didn't exist or no finished course!");
+      }
       // 有評分的課程
       const scoredCourses = courses.filter((item) => {
         return item.Courses.score !== null;
       });
-      if (!scoredCourses) {
-        throw new Error("This teacher did not have a scored course.");
-      }
       let courseScore = scoredCourses.map((item) => {
-        return { id:item.Courses.id,score: item.Courses.score, intro: item.intro };
+        return {
+          id: item.Courses.id,
+          score: item.Courses.score,
+          intro: item.intro,
+        };
       });
       // 老師評分
       const scores = scoredCourses.map((item) => {
@@ -106,6 +130,8 @@ const courseService = {
           "sunday",
         ],
       });
+      if (!courseData)
+        throw new Error("TeacherId didn't exist or no available appointment!");
       const courseDuration = courseData.courseDuration;
       const availableWeekday = [
         courseData.sunday,
@@ -158,7 +184,6 @@ const courseService = {
     const userId = req.user.id;
     const teacherId = Number(req.params.id);
     const { date } = req.body;
-
     Promise.all([
       Teacher.findOne({
         raw: true,
@@ -170,6 +195,8 @@ const courseService = {
       }),
     ])
       .then(([teacher, user]) => {
+        if (!teacher) throw new Error("Teacher doesn't exist!");
+        if (!user) throw new Error("User doesn't exist!");
         const hours = user.courseHours + teacher.courseDuration;
         user.update({ courseHours: hours });
       })
@@ -193,7 +220,32 @@ const courseService = {
         cb(e);
       });
   },
-  postScore: async (req, cb) => {
+  postScore: (req, cb) => {
+    const userId = Number(req.params.id);
+    const { courseID, score, comment } = req.body;
+    if (!score || !comment) throw new Error("All data are required!");
+    Course.findOne({
+      where: { id: Number(courseID), userId },
+    })
+      .then((course) => {
+        const scoredCourse = course.update({
+          score,
+          comment,
+        });
+        return scoredCourse;
+      })
+      .then((course) => {        
+        
+        return cb(null, { course });
+      })
+      .catch((e) => {
+        cb(e);
+      });
+  },
+};
+module.exports = courseService;
+/*
+postScore: async (req, cb) => {
     const userId = Number(req.params.id);
     const { courseID, score, comment } = req.body;
     
@@ -221,5 +273,4 @@ const courseService = {
         cb(e);
       });
   },
-};
-module.exports = courseService;
+*/

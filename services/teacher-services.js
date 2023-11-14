@@ -1,11 +1,26 @@
-// sequelize
-const { Op } = require("sequelize");
+
 // model
 const { Teacher, User, Course } = require("../models");
 // pagination
 const { getOffset, getPagination } = require("../helpers/pagination-helper.js");
 
 const teacherService = {
+  // 老師的資料
+  getTeacher: async (req, cb) => {
+    try {
+      const userId = Number(req.params.id);
+      const teacher = await Teacher.findOne({
+        raw: true,
+        nest: true,
+        where: { id: userId },
+        include: [User],
+      });
+      if(!teacher)throw new Error("Teacher is not exist!")
+      return cb(null, { teacher });
+    } catch (e) {
+      cb(e);
+    }
+  },
   // 取得所有教師
   getTeachers: async (req, cb) => {
     try {
@@ -57,8 +72,8 @@ const teacherService = {
       const filterDatas = teacherRows.filter((data) => {
         return data.User.name.toLowerCase().includes(keyword);
       });
-
       return cb(null, {
+        keyword,
         filterDatas,
         pagination: getPagination(limit, page, filterDatas.length),
       });
@@ -70,7 +85,7 @@ const teacherService = {
   postBeTeacher: async (req, cb) => {
     try {
       const id = req.params.id;
-      const idExist = await Teacher.findAll({
+      const idExist = await Teacher.findOne({
         raw: true,
         nest: true,
         where: { userId: id },
@@ -132,6 +147,7 @@ const teacherService = {
         where: { teacherId: userId, isDone: true },
         include: [Teacher],
       });
+      if (!courses.length) throw new Error("Course is not exist!");
       const scoreArray = courses.map((item) => {
         return item.score;
       });
@@ -139,45 +155,60 @@ const teacherService = {
         total += item;
       });
       const averageScore =
-        Math.ceil((total / scoreArray.length) * 10) / 10 ||
-        "使用者尚未被評分";
+        Math.ceil((total / scoreArray.length) * 10) / 10 || "使用者尚未被評分";
       return cb(null, { averageScore });
     } catch (e) {
       cb(e);
     }
-  },
-
-  // 老師的資料(課程風格)
-  getTeacher: async (req, cb) => {
-    try {
-      const userId = Number(req.params.id);
-      const teacher = await Teacher.findOne({
-        raw: true,
-        nest: true,
-        where: { id: userId },
-        include: [User],
+  },  
+  putTeacher: async (req, cb) => {
+    const {
+      name,
+      intro,
+      style,
+      courseDuration,
+      link,
+      monday,
+      tuesday,
+      wednesday,
+      thursday,
+      friday,
+      saturday,
+      sunday,
+    } = req.body;
+    if (!name || !intro || !style || !courseDuration || !link)
+      throw new Error("Data are required!");
+    return Promise.all([
+      User.findByPk(req.user.id),
+      Teacher.findByPk(req.params.id),
+    ])
+      .then(async ([user, teacher]) => {
+        if (!user) throw new Error("User didn't exist!");
+        if (!teacher) throw new Error("Teacher didn't exist!");
+        await user.update({
+          name,
+        });
+        const putTeacher = await teacher.update({
+          intro,
+          style,
+          courseDuration,
+          link,
+          monday: monday || 0,
+          tuesday: tuesday || 0,
+          wednesday: wednesday || 0,
+          thursday: thursday || 0,
+          friday: friday || 0,
+          saturday: saturday || 0,
+          sunday: sunday || 0,
+        });
+        return putTeacher;
+      })
+      .then((teacher) => {
+        return cb(null, { teacher });
+      })
+      .catch((e) => {
+        cb(e);
       });
-      return cb(null, { teacher });
-    } catch (e) {
-      cb(e);
-    }
-  },
-  // 已評分的課程
-  getScoredCourses: async (req, cb) => {
-    try {
-      const userId = req.params.id;
-      const scoredCourses = await Course.findAll({
-        raw: true,
-        nest: true,
-        where: {
-          [Op.and]: [{ teacherId: userId }, { score: { [Op.not]: null } }],
-        },
-        include: [Teacher],
-      });
-      return cb(null, { scoredCourses });
-    } catch (e) {
-      cb(e);
-    }
   },
 };
 module.exports = teacherService;

@@ -1,5 +1,4 @@
 <form method="POST" action="/teachers/edit/{{user.id}}?_method=PUT" class="mx-5">
-
   <div class="mb-3">
     <label for="name" class="form-label">
       <h3><i class="fa-solid fa-chalkboard-user" style="color: #000000;">&nbsp;教師名稱</i>
@@ -54,8 +53,13 @@
       name="courseDuration"
       id="courseDuration"
     >
-      <option selected value="0.5">30 分鐘</option>
-      <option value="1">60 分鐘</option>
+      <option value="0.5"
+      {{#ifCond teacher.courseDuration 0.5}}
+    selected
+    {{/ifCond}}>30 分鐘</option>
+    <option value="1" {{#ifCond teacher.courseDuration 1}}
+    selected
+    {{/ifCond}}>60 分鐘</option>
     </select>
   </div>
   <!--link-->
@@ -185,4 +189,4 @@
   </div>
   <button type="submit" class="btn btn-outline-danger">Submit</button>
 </form>
-<a class="btn btn-secondary my-2 mx-5" href="/teachers/{{teacher.id}}">Back</a>
+<a class="btn btn-secondary" href="/teachers/{{teacher.id}}">Back</a>

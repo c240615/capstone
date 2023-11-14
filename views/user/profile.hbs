@@ -32,7 +32,7 @@
           href="/users/edit/{{user.id}}"
         >Edit</a>
       </button>
-      <a class="btn btn-secondary" href="/">Back</a>
+      <a class="btn btn-secondary my-2" href="/">Back</a>
     </div>
 
     <!--課程資料-->
@@ -46,17 +46,29 @@
         {{#each notDoneCourses}}
           <div class="col-6">
             <div class="card my-2" style="width: 22rem;">
-              <div class="card-body" >
-                <h6 class="card-title courseDate" >
-                  <i class="fa-regular fa-calendar-days" style="color: #c0c0c0;"></i>
+              <div class="card-body">
+                <h6 class="card-title courseDate">
+                  <i
+                    class="fa-regular fa-calendar-days"
+                    style="color: #c0c0c0;"
+                  ></i>
                   {{this.date}}
-                  </h6>
+                </h6>
                 <h6 class="card-subtitle mb-2">
-                  <i class="fa-solid fa-chalkboard-user" style="color: #c0c0c0;"></i>
+                  <i
+                    class="fa-solid fa-chalkboard-user"
+                    style="color: #c0c0c0;"
+                  ></i>
                   {{this.Teacher.User.name}}
-                  </h6>
-                <h6><i class="fa-solid fa-link" style="color: #c0c0c0;"></i>&#09;<a href="/comment" class="card-link">{{this.Teacher.link}}</a></h6>
-                
+                </h6>
+                <h6><i
+                    class="fa-solid fa-link"
+                    style="color: #c0c0c0;"
+                  ></i>&#09;<a
+                    href="/comment"
+                    class="card-link"
+                  >{{this.Teacher.link}}</a></h6>
+
               </div>
             </div>
           </div>
@@ -68,10 +80,10 @@
         <i class="fa-solid fa-square-check" style="color: #000000;">&#09;</i>
         Lesson History
       </h3>
-      <div class="row ">
+      <div class="row">
         {{#each notRatedCourses}}
           <form class="row g-3 col-6 m-0 p-0">
-            <div class="col-auto ">
+            <div class="col-auto">
               <img
                 readonly
                 class="form-control-plaintext p-0 m-0"
@@ -86,7 +98,6 @@
                 name="courseId"
                 class="form-control"
                 value="{{this.id}}"
-                disabled
               />
             </div>
             <div class="col-5 mx-0">
@@ -94,7 +105,7 @@
                 type="text"
                 name="userId"
                 class="form-control"
-                value="教師 : {{this.Teacher.User.name}}"
+                value="{{this.Teacher.User.name}}"
                 disabled
               />
             </div>
@@ -150,11 +161,7 @@
               <input
                 id="courseID"
                 type="number"
-                min="1"
-                max="100"
-                name="courseID"
-                disabled
-                required
+                name="courseID"                
               />
             </div>
             <div class="col-8 m-2">
@@ -195,10 +202,18 @@
 </div>
 
 <script>
-  /*預約課程按鈕*/ const btn = document.querySelector(".select"); /*已選擇的課程
-  id*/ const courseId = document.getElementById("courseId");
-  /*待送出的表格欄位*/ const courseID = document.getElementById("courseID");
-  /*綁定按鈕點擊事件 (預約課程)*/ 
-  btn.addEventListener("click", ()=>{
-   courseID.value = courseId.value; });  
+  /* const btn = document.querySelector(".select");  const courseId = document.getElementById("courseId");
+   const courseID = document.getElementById("courseID");
+   btn.addEventListener("click", ()=>{ const
+  index = courseId.selectedIndex;  
+  courseID.value = courseId.value 
+  });*/
+  const myModalEl = document.getElementById('exampleModal')
+myModalEl.addEventListener('show.bs.modal', function (event) {
+  // 讀取資料
+  const selectedId = courseId.value;
+  const index = courseId.selectedIndex;
+  // 寫入資料
+  courseID.value = courseId.value ;
+})
 </script>

@@ -1,5 +1,3 @@
-// model
-const { Teacher, User } = require("../../models");
 // service
 const teacherService = require("../../services/teacher-services.js");
 const userService = require("../../services/user-services.js");
@@ -20,7 +18,7 @@ const teacherController = {
       err
         ? next(err)
         : res.render("teachers", {
-            teacherDatas: data.teacherRows,
+            teacherDatas: data.teacherRows ,
             pagination: data.pagination,
             topTen,
           });
@@ -46,7 +44,7 @@ const teacherController = {
       if (err) {
         next(err);
       }
-      return data.averageScore;
+      return data.averageScore ;
     });
     const notDoneCourses = await courseService.getNotDoneCourses(
       req,
@@ -54,24 +52,23 @@ const teacherController = {
         if (err) {
           next(err);
         }
-        
         return data.notDoneCourses;
       }
-    );  
+    );
     const style = await teacherService.getTeacher(req, (err, data) => {
       if (err) {
         next(err);
       }
-      return data.teacher.style;
+      return data.teacher.style ;
     });
-    await teacherService.getScoredCourses(req, (err, data) => {
+    await courseService.getScoredCourses(req, (err, data) => {
       err
         ? next(err)
         : res.render("user/teacher", {
             averageScore,
             notDoneCourses,
             style,
-            scoredCourses: data.scoredCourses,
+            scoredCourses: data.scoredCourses ,
           });
     });
   },
@@ -83,14 +80,14 @@ const teacherController = {
         if (err) {
           next(err);
         }
-        return data.topTen;
+        return data.topTen ;
       });
-
       await teacherService.getSearchedTeachers(req, (err, data) => {
         err
           ? next(err)
           : res.render("filteredTeachers", {
-              filterDatas: data.filterDatas,
+              keyword: data.keyword ,
+              filterDatas: data.filterDatas ,
               pagination: data.pagination,
               topTen,
             });
@@ -100,63 +97,23 @@ const teacherController = {
     }
   },
   getEditPage: async (req, res, next) => {
-    return await Teacher.findByPk(req.params.id, {
-      raw: true,
-      nest: true,
-    })
-      .then((teacher) => {
-        if (!teacher) throw new Error("Teacher didn't exist!");
-        res.render("user/editTeacher", { teacher });
-      })
-      .catch((err) => next(err));
+    return await teacherService.getTeacher(req, (err, data) => {
+      if (err) {
+        next(err);
+      }
+      res.render("user/editTeacher", {
+        teacher: data.teacher,
+      });
+    });
   },
   putTeacher: (req, res, next) => {
-    const {
-      name,
-      intro,
-      style,
-      courseDuration,
-      link,
-      monday,
-      tuesday,
-      wednesday,
-      thursday,
-      friday,
-      saturday,
-    } = req.body;
-    if (!name || !intro || !style || !courseDuration || !link)
-      throw new Error("Data are required!");
-    console.log(req.body);
-    return Promise.all([
-      User.findByPk(req.user.id),
-      Teacher.findByPk(req.params.id),
-    ])
-      .then(async ([user, teacher]) => {
-        if (!user) throw new Error("User didn't exist!");
-        if (!teacher) throw new Error("Teacher didn't exist!");
-        await user.update({
-          name,
-        });
-        await teacher.update({
-          intro,
-          style,
-          courseDuration,
-          link,
-          monday: monday || 0,
-          tuesday: tuesday || 0,
-          wednesday: wednesday || 0,
-          thursday: thursday || 0,
-          friday: friday || 0,
-          saturday: saturday || 0,
-        });
-      })
-      .then(() => {
-        req.flash("success_messages", "Data was successfully to update");
-        res.redirect(`/teachers/${req.params.id}`);
-      })
-      .catch((e) => {
-        next(e);
-      });
+    return teacherService.putTeacher(req, (err) => {
+      if (err) {
+        next(err);
+      }
+      req.flash("success_messages", "修改成功！");
+      res.redirect(`/teachers/${req.params.id}`);
+    });
   },
 };
 module.exports = teacherController;

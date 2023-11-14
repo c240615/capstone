@@ -1,4 +1,3 @@
-const { User, Course, Teacher } = require("../../models");
 const courseService = require("../../services/course-services");
 const teacherService = require("../../services/teacher-services.js");
 
@@ -42,6 +41,7 @@ const courseController = {
       next(e);
     }
   },
+  // 預約新課程
   postCourse: async (req, res, next) => {
     const userId = req.user.id;
     await courseService.postCourse(req, (err) => {
@@ -52,6 +52,7 @@ const courseController = {
       res.redirect(`/users/${userId}`);
     });
   },
+  // 評分
   postScore: async (req, res, next) => {
     const userId = req.params.id;
     await courseService.postScore(req, (err) => {
@@ -63,5 +64,4 @@ const courseController = {
     });
   },
 };
-
 module.exports = courseController;

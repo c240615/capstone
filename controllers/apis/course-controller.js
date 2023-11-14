@@ -34,15 +34,13 @@ const userController = {
     });
   },
   postCourse: async (req, res, next) => {
-    await courseService.postCourse(req, (err, data) => {
-      
+    await courseService.postCourse(req, (err, data) => {      
       err ? next(err) : res.json({ status: "success", data });
     });
   },
   // 評分
-  postScore: async (req, res, next) => {
-    await courseService.postScore(req, (err, data) => {
-      
+  postScore:  (req, res, next) => {
+     courseService.postScore(req, (err, data) => {      
       err ? next(err) : res.json({ status: "success", data });
     });
   },
