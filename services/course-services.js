@@ -225,17 +225,18 @@ const courseService = {
     const { courseID, score, comment } = req.body;
     if (!score || !comment) throw new Error("All data are required!");
     Course.findOne({
-      where: { id: Number(courseID), userId },
+      where: { id: Number(courseID), userId: userId },
     })
       .then((course) => {
+        if (!course) throw new Error("Course didn't exist!!");
         const scoredCourse = course.update({
           score,
           comment,
         });
         return scoredCourse;
       })
-      .then((course) => {        
-        
+      .then((course) => {
+        course = course.toJSON();
         return cb(null, { course });
       })
       .catch((e) => {

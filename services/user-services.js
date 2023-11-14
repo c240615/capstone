@@ -83,15 +83,14 @@ const userService = {
           [Op.and]: [{ userId: id }, { score: null }, { isDone: true }],
         },
         include: [{ model: Teacher, include: [{ model: User }] }],
+      });      
+      let notRatedCourses = notRatedCoursesData.map((item) => {
+        delete item.Teacher.User.password;
+        return item;
       });
-      const notRatedCourses =
-        notRatedCoursesData.map((item) => {
-          delete item.Teacher.User.password;
-          return item;
-        }) || "沒有相關課程";
-      if (!notRatedCourses.length)
-        throw new Error("NotRatedCourses didn't exist!");
-      
+      if (!notRatedCourses.length) {
+       notRatedCourses = false
+      }
       return cb(null, { notRatedCourses });
     } catch (e) {
       cb(e);

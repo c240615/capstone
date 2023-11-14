@@ -98,7 +98,7 @@ router.get(
 router.post("/reserve/:id", authenticated, courseController.postCourse);
 
 // 評論課程
-router.post("/comment/:id", authenticated, courseController.postScore);
+router.post("/comment/:id",  courseController.postScore);
 
 // 前台教師清單
 router.get("/teachers", authenticated, teacherController.getTeachers);
