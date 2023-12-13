@@ -33,74 +33,76 @@ const userService = {
   },
   // 當前使用者基本資料
   getUser: async (req, cb) => {
-    try {
-      const id = Number(req.params.id);
-      const user = await User.findOne({
-        raw: true,
-        nest: true,
-        where: { id },
-        include: [Course],
+    const id = Number(req.params.id);
+    return await User.findOne({
+      raw: true,
+      nest: true,
+      where: { id },
+      include: [Course],
+    })
+      .then((user) => {
+        delete user.password;
+        return cb(null, {
+          user,
+        });
+      })
+      .catch((e) => {
+        cb(e);
       });
-      if (!user) throw new Error("User didn't exist!");
-      delete user.password;
-      return cb(null, {
-        user,
-      });
-    } catch (e) {
-      cb(e);
-    }
   },
   // 未完成課程老師的使用者資料
   getNotDoneCourses: async (req, cb) => {
-    try {
-      const id = Number(req.params.id);
-      const notDoneCoursesData = await Course.findAll({
-        raw: true,
-        nest: true,
-        where: { userId: id, isDone: false },
-        include: [{ model: Teacher, include: [{ model: User }] }],
+    const id = Number(req.params.id);
+    return await Course.findAll({
+      raw: true,
+      nest: true,
+      where: { userId: id, isDone: false },
+      include: [{ model: Teacher, include: [{ model: User }] }],
+    })
+      .then((courses) => {
+        console.log(courses);
+        let notDoneCourses = courses.map((item) => {
+          delete item.Teacher.User.password;
+          return item;
+        });
+        if (!notDoneCourses.length) {
+          notDoneCourses = false;
+        }        
+        return cb(null, { notDoneCourses });
+      })
+      .catch((e) => {
+        cb(e);
       });
-
-      const notDoneCourses = notDoneCoursesData.map((item) => {
-        delete item.Teacher.User.password;
-        return item;
-      });
-      if (!notDoneCourses.length)
-        throw new Error("NotDoneCourses didn't exist!");
-      return cb(null, { notDoneCourses });
-    } catch (e) {
-      cb(e);
-    }
   },
   // 已完成未評分課程老師的使用者資料
   getNotRatedCourses: async (req, cb) => {
-    try {
-      const id = Number(req.params.id);
-      const notRatedCoursesData = await Course.findAll({
-        raw: true,
-        nest: true,
-        where: {
-          [Op.and]: [{ userId: id }, { score: null }, { isDone: true }],
-        },
-        include: [{ model: Teacher, include: [{ model: User }] }],
-      });      
-      let notRatedCourses = notRatedCoursesData.map((item) => {
-        delete item.Teacher.User.password;
-        return item;
+    const id = Number(req.params.id);
+    return await Course.findAll({
+      raw: true,
+      nest: true,
+      where: {
+        [Op.and]: [{ userId: id }, { score: null }, { isDone: true }],
+      },
+      include: [{ model: Teacher, include: [{ model: User }] }],
+    })
+      .then((courses) => {
+        let notRatedCourses = courses.map((item) => {
+          delete item.Teacher.User.password;
+          return item;
+        });
+        if (!notRatedCourses.length) {
+          notRatedCourses = false;
+        }
+        return cb(null, { notRatedCourses });
+      })
+      .catch((e) => {
+        cb(e);
       });
-      if (!notRatedCourses.length) {
-       notRatedCourses = false
-      }
-      return cb(null, { notRatedCourses });
-    } catch (e) {
-      cb(e);
-    }
   },
   // 學習名次
   getRanking: async (req, cb) => {
     try {
       const id = Number(req.params.id);
-
       const user = await User.findOne({
         raw: true,
         nest: true,
@@ -115,10 +117,12 @@ const userService = {
           ["name", "ASC"],
         ],
       });
-      const topName = topUsers.map((item) => {
-        return item.name;
-      });
-      const ranking = topName.indexOf(user.name) + 1;
+      const ranking =
+        topUsers
+          .map((item) => {
+            return item.name;
+          })
+          .indexOf(user.name) + 1;
       return cb(null, { ranking });
     } catch (e) {
       cb(e);
@@ -126,24 +130,25 @@ const userService = {
   },
   // 排行榜
   getTopUsers: async (req, cb) => {
-    try {
-      const topUsers = await User.findAll({
-        raw: true,
-        nest: true,
-        limit: 10,
-        order: [
-          ["course_hours", "DESC"],
-          ["name", "ASC"],
-        ],
+    return await User.findAll({
+      raw: true,
+      nest: true,
+      limit: 10,
+      order: [
+        ["course_hours", "DESC"],
+        ["name", "ASC"],
+      ],
+    })
+      .then((topUsers) => {
+        if (!topUsers) throw new Error("No topUsers data!");
+        const topTen = topUsers.map((item, index) => {
+          return { profile: item.profile, index: index + 1, name: item.name };
+        });
+        return cb(null, { topTen });
+      })
+      .catch((e) => {
+        cb(e);
       });
-      if (!topUsers) throw new Error("No topUsers data!");
-      const topTen = topUsers.map((item, index) => {
-        return { profile: item.profile, index: index + 1, name: item.name };
-      });
-      return cb(null, { topTen });
-    } catch (e) {
-      cb(e);
-    }
   },
   // 編輯使用者資料
   putUser: (req, cb) => {

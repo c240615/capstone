@@ -3,7 +3,7 @@
 const bcrypt = require("bcryptjs");
 const faker = require("faker");
 
-/** @type {import('sequelize-cli').Migration} */
+/* @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert("Users", [

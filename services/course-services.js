@@ -184,6 +184,8 @@ const courseService = {
     const userId = req.user.id;
     const teacherId = Number(req.params.id);
     const { date } = req.body;
+    const courseTime = Date.now(date);
+    const today = Date.now();
     Promise.all([
       Teacher.findOne({
         raw: true,
@@ -203,13 +205,12 @@ const courseService = {
       .then(() => {
         const newCourse = Course.create({
           date,
-          isDone: false,
+          isDone: courseTime > today ? true : false,
           score: null,
           comment: null,
           teacherId,
           userId,
         });
-
         return newCourse;
       })
       .then((newCourse) => {

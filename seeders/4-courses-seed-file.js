@@ -27,7 +27,7 @@ function futureDate() {
   time.setHours(Math.random() < 0.5 ? 18 : 19, 0, 0);
   return time;
 }
-/** @type {import('sequelize-cli').Migration} */
+/* @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     // userIds 陣列 [{id:1},{id:2}]

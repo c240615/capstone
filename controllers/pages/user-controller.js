@@ -47,19 +47,19 @@ const userController = {
       userService.getNotDoneCourses(req, (err, data) => {
         if (err) {
           next(err);
-        }
+        }      
         return data.notDoneCourses;
       }),
       userService.getNotRatedCourses(req, (err, data) => {
         if (err) {
           next(err);
-        }
+        }        
         return data.notRatedCourses;
       }),
       userService.getRanking(req, (err, data) => {
         if (err) {
           next(err);
-        }
+        }        
         return data.ranking;
       }),
     ])

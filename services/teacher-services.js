@@ -1,4 +1,3 @@
-
 // model
 const { Teacher, User, Course } = require("../models");
 // pagination
@@ -146,8 +145,7 @@ const teacherService = {
         nest: true,
         where: { teacherId: userId, isDone: true },
         include: [Teacher],
-      });
-      if (!courses.length) throw new Error("Course is not exist!");
+      });      
       const scoreArray = courses.map((item) => {
         return item.score;
       });

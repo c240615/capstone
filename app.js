@@ -61,22 +61,4 @@ app.listen(port, () => {
   console.log(`Running on http://localhost:${port}`);
 });
 module.exports = app;
-const a = {
-  status: "success",
-  data: {
-    user: {
-      id: 1,
-      name: "root",
-      email: "root@example.com",
-      password: "$2a$10$XAyJzmKDU1jEPOOFjlWvo.lvmh3/wYHbrW.SJNe5r6QL4P7p5psRy",
-      profile: "/upload/SeaMoon.jpg",
-      nation: "ROC",
-      intro: "Voluptatem suscipit nostrumm qui.",
-      isAdmin: true,
-      isTeacher: true,
-      courseHours: 5,
-      createdAt: "2023-10-14T11:14:03.000Z",
-      updatedAt: "2023-10-30T08:02:06.947Z",
-    },
-  },
-};
+/* https://tutor-platform.fly.dev/ */

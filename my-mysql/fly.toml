@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for tutor-my-mysql on 2023-12-13T21:50:55+08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "tutor-my-mysql"
+primary_region = "nrt"
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[processes]
+app = """--datadir /data/mysql \
+  --default-authentication-plugin mysql_native_password \
+  --performance-schema=OFF \
+  --innodb-buffer-pool-size 64M"""
+
+[mounts]
+  source="mysqldata"
+  destination="/data"
+
+[env]
+  MYSQL_DATABASE = "capstone"
+  MYSQL_USER = "user"
+
+[build]
+  image = "mysql:8.0.32"

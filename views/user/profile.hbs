@@ -44,6 +44,7 @@
       </h3>
       <div class="row my-2">
         {{#each notDoneCourses}}
+
           <div class="col-6">
             <div class="card my-2" style="width: 22rem;">
               <div class="card-body">
@@ -72,6 +73,7 @@
               </div>
             </div>
           </div>
+
         {{/each}}
       </div>
 
@@ -80,9 +82,8 @@
         <i class="fa-solid fa-square-check" style="color: #000000;">&#09;</i>
         Lesson History
       </h3>
-      <div class="row">        
+      <div class="row">
         {{#each notRatedCourses}}
-        {{#if notRatedCourses}}
           <form class="row g-3 col-6 m-0 p-0">
             <div class="col-auto">
               <img
@@ -92,14 +93,17 @@
                 src="{{this.Teacher.User.profile}}"
               />
             </div>
-            <div class="col-3 mx-0 px-0">
+            <div class="col-3 mx-0 px-0" style="display: flex; ">
+              <p class="m-0 py-2">第</p>
               <input
                 type="text"
                 id="courseId"
                 name="courseId"
-                class="form-control"
+                class="form-control mx-1"
+                style="width: 50%;"
                 value="{{this.id}}"
               />
+              <p class="m-0 py-2">堂</p>
             </div>
             <div class="col-5 mx-0">
               <input
@@ -122,7 +126,6 @@
               </button>
             </div>
           </form>
-          {{/if}}          
         {{/each}}
       </div>
       <!--我的學習次數名次-->
@@ -136,7 +139,6 @@
     </div>
   </div>
 </div>
-
 <!-- Modal -->
 <div
   class="modal fade"
@@ -160,11 +162,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-8 m-2">
-              <input
-                id="courseID"
-                type="number"
-                name="courseID"                
-              />
+              <input id="courseID" type="number" name="courseID" />
             </div>
             <div class="col-8 m-2">
               <input
@@ -202,20 +200,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  /* const btn = document.querySelector(".select");  const courseId = document.getElementById("courseId");
-   const courseID = document.getElementById("courseID");
-   btn.addEventListener("click", ()=>{ const
-  index = courseId.selectedIndex;  
-  courseID.value = courseId.value 
-  });*/
-  const myModalEl = document.getElementById('exampleModal')
-myModalEl.addEventListener('show.bs.modal', function (event) {
-  // 讀取資料
-  const selectedId = courseId.value;
-  const index = courseId.selectedIndex;
-  // 寫入資料
-  courseID.value = courseId.value ;
-})
-</script>
