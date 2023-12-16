@@ -61,4 +61,3 @@ app.listen(port, () => {
   console.log(`Running on http://localhost:${port}`);
 });
 module.exports = app;
-/* https://tutor-platform.fly.dev/ */

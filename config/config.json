@@ -17,7 +17,7 @@
     "username": "root",
     "password": "password",
     "database": "capstone",
-    "host": "tutor-my-mysql.internal",
+    "host": "tutor-platform-mysql.internal",
     "dialect": "mysql"    
   }
 }
