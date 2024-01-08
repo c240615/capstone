@@ -2,7 +2,7 @@
 
 ## 系統分析文件
 
-API 文件
+[API 文件](https://lucky-tumble-dd2.notion.site/5026f9ab16bf4845808e4bcf8b1471b8)
 
 ## 開始使用
 
