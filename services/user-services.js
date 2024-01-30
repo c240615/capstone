@@ -9,10 +9,10 @@ const bcrypt = require("bcryptjs");
 
 const userService = {
   // 註冊
-  signUp: async (req, cb) => {
+  signUp: (req, cb) => {
     if (req.body.password !== req.body.passwordCheck)
       throw new Error("Passwords do not match!");
-    return await User.findOne({ where: { email: req.body.email } })
+    return User.findOne({ where: { email: req.body.email } })
       .then((user) => {
         if (user) throw new Error("Email already exists!");
         return bcrypt.hash(req.body.password, 10);
@@ -32,9 +32,9 @@ const userService = {
       });
   },
   // 當前使用者基本資料
-  getUser: async (req, cb) => {
+  getUser: (req, cb) => {
     const id = Number(req.params.id);
-    return await User.findOne({
+    return User.findOne({
       raw: true,
       nest: true,
       where: { id },
@@ -51,23 +51,22 @@ const userService = {
       });
   },
   // 未完成課程老師的使用者資料
-  getNotDoneCourses: async (req, cb) => {
+  getNotDoneCourses: (req, cb) => {
     const id = Number(req.params.id);
-    return await Course.findAll({
+    return Course.findAll({
       raw: true,
       nest: true,
       where: { userId: id, isDone: false },
       include: [{ model: Teacher, include: [{ model: User }] }],
     })
       .then((courses) => {
-        console.log(courses);
         let notDoneCourses = courses.map((item) => {
           delete item.Teacher.User.password;
           return item;
         });
         if (!notDoneCourses.length) {
           notDoneCourses = false;
-        }        
+        }
         return cb(null, { notDoneCourses });
       })
       .catch((e) => {
@@ -75,9 +74,9 @@ const userService = {
       });
   },
   // 已完成未評分課程老師的使用者資料
-  getNotRatedCourses: async (req, cb) => {
+  getNotRatedCourses: (req, cb) => {
     const id = Number(req.params.id);
-    return await Course.findAll({
+    return Course.findAll({
       raw: true,
       nest: true,
       where: {
@@ -129,8 +128,8 @@ const userService = {
     }
   },
   // 排行榜
-  getTopUsers: async (req, cb) => {
-    return await User.findAll({
+  getTopUsers: (req, cb) => {
+    return User.findAll({
       raw: true,
       nest: true,
       limit: 10,
@@ -151,11 +150,11 @@ const userService = {
       });
   },
   // 編輯使用者資料
-  putUser: (req, cb) => {
+  putUser: async (req, cb) => {
     const { file } = req;
     const { name, nation, intro } = req.body;
     if (!name || !nation || !intro) throw new Error("All datas are required!");
-    Promise.all([User.findByPk(req.params.id), localFileHandler(file)]).then(
+    await Promise.all([User.findByPk(req.params.id), localFileHandler(file)]).then(
       ([user, filePath]) => {
         if (!user) throw new Error("user didn't exist!");
         return user

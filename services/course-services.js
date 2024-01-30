@@ -186,7 +186,7 @@ const courseService = {
     const { date } = req.body;
     const courseTime = Date.now(date);
     const today = Date.now();
-    Promise.all([
+    await Promise.all([
       Teacher.findOne({
         raw: true,
         nest: true,
@@ -246,33 +246,4 @@ const courseService = {
   },
 };
 module.exports = courseService;
-/*
-postScore: async (req, cb) => {
-    const userId = Number(req.params.id);
-    const { courseID, score, comment } = req.body;
-    
-    Course.findAll({
-      where: { id: Number(courseID), userId: userId },
-    })
-      .then((course) => {
-        if (!score || !comment) {
-          throw new Error("All datas are required!");
-        }
 
-        if (!course) throw new Error("Course did not exist!");
-        if (course?.length > 0) {
-          course[0].update({
-            score,
-            comment,
-          });
-        }
-        return course;
-      })
-      .then((course) => {
-        return cb(null, { course });
-      })
-      .catch((e) => {
-        cb(e);
-      });
-  },
-*/

@@ -14,7 +14,7 @@ const teacherService = {
         where: { id: userId },
         include: [User],
       });
-      if(!teacher)throw new Error("Teacher is not exist!")
+      if (!teacher) throw new Error("Teacher is not exist!");
       return cb(null, { teacher });
     } catch (e) {
       cb(e);
@@ -125,10 +125,9 @@ const teacherService = {
       //  update 前不要用 raw:true
       const userData = await User.findOne({
         where: { id },
-      }).then((user) => {
-        return user.update({ isTeacher: true });
       });
-      const user = userData.toJSON();
+      const updateUserData = await userData.update({ isTeacher: true });
+      const user = updateUserData.toJSON();
       delete user.password;
       return cb(null, { teacher, user });
     } catch (e) {
@@ -145,7 +144,7 @@ const teacherService = {
         nest: true,
         where: { teacherId: userId, isDone: true },
         include: [Teacher],
-      });      
+      });
       const scoreArray = courses.map((item) => {
         return item.score;
       });
@@ -158,7 +157,7 @@ const teacherService = {
     } catch (e) {
       cb(e);
     }
-  },  
+  },
   putTeacher: async (req, cb) => {
     const {
       name,
@@ -176,7 +175,7 @@ const teacherService = {
     } = req.body;
     if (!name || !intro || !style || !courseDuration || !link)
       throw new Error("Data are required!");
-    return Promise.all([
+    return await Promise.all([
       User.findByPk(req.user.id),
       Teacher.findByPk(req.params.id),
     ])
